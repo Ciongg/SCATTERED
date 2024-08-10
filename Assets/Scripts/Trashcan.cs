@@ -12,11 +12,13 @@ public class Trashcan : MonoBehaviour
     
     public GameObject particlePrefab;
     public GameObject wrongParticlePrefab;
+    public GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
     }
 
     // Update is called once per frame
@@ -25,21 +27,32 @@ public class Trashcan : MonoBehaviour
         
     }
 
+    void WrongAnswer(Collider2D collider){
+        Debug.Log("Wrong");
+            gameManager.LoseLife(1);
+            PlayWrongParticle();
+            Destroy(collider.gameObject);
+        
+    }
+
+    void CorrectAnswer(Collider2D collider){
+         Debug.Log("Correct");
+            gameManager.AddScore(Random.Range(10, 16));   
+            Destroy(collider.gameObject);
+            PlayParticle();
+    }
+
     void OnTriggerEnter2D(Collider2D collider) {
 
         
         if(isBiodegradable){
 
         if(collider.tag != "Biodegradable"){
-            Debug.Log("Wrong");
-            PlayWrongParticle();
-            Destroy(collider.gameObject);
+            WrongAnswer(collider);
             
         }else{
-            Debug.Log("Correct");
-            Destroy(collider.gameObject);
-            PlayParticle();
-            
+           
+            CorrectAnswer(collider);
         }
         }
 
@@ -47,14 +60,10 @@ public class Trashcan : MonoBehaviour
         if(isNotBiodegradable){
 
         if(collider.tag != "NonBiodegradable"){
-            PlayWrongParticle();
-            Debug.Log("Wrong");
-            Destroy(collider.gameObject);
+            WrongAnswer(collider);
             
         }else{
-            Debug.Log("Correct");
-            Destroy(collider.gameObject);
-            PlayParticle();
+             CorrectAnswer(collider);
             
         }
         }
@@ -62,14 +71,10 @@ public class Trashcan : MonoBehaviour
         if(isToxic){
 
         if(collider.tag != "Toxic"){
-            PlayWrongParticle();
-            Debug.Log("Wrong");
-            Destroy(collider.gameObject);
+            WrongAnswer(collider);
             
         }else{
-            Debug.Log("Correct");
-            Destroy(collider.gameObject);
-            PlayParticle();
+            CorrectAnswer(collider);
             
         }
         }
@@ -87,6 +92,7 @@ public class Trashcan : MonoBehaviour
                 // Destroy the particle system after it has played to clean up
                 Destroy(particleSystemInstance, ps.main.duration + ps.main.startLifetime.constantMax);
     }
+
 
     void PlayWrongParticle(){
         GameObject particleSystemInstance = Instantiate(wrongParticlePrefab, transform.position, Quaternion.identity);

@@ -138,6 +138,7 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //sets color when drag begins
         Color currentColor = spriteRenderer.color;
         currentColor.a = 0.5f;
         spriteRenderer.color = currentColor;

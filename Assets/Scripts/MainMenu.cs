@@ -10,6 +10,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
+    public void PlayGame2()
+    {
+        SceneManager.LoadSceneAsync(2);
+    }
+
     public void Main()
     {
         SceneManager.LoadSceneAsync(0);
@@ -26,4 +31,6 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
     }
+
+    
 }
