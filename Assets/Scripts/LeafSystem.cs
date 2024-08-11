@@ -7,6 +7,7 @@ public class LeafSystem : MonoBehaviour
 {
 
     public GameManager gameManager;
+    public GameObject leafParticles;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,10 @@ public class LeafSystem : MonoBehaviour
         if(collider.tag == "NonBiodegradable" || collider.tag == "Biodegradable" || collider.tag == "Toxic" ){
             gameManager.AddLeaf(1);
             Destroy(gameObject);
+            GameObject leafInstance = Instantiate(leafParticles, transform.position, Quaternion.identity);
+            // ParticleSystem ps = GetComponent<ParticleSystem>();
+
+            Destroy(leafInstance, 2f);
         }
 
     }

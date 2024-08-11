@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3106132744219655535}
   - component: {fileID: 3106132744219655528}
   - component: {fileID: 3106132744219655529}
-  - component: {fileID: 7417043601907637972}
   - component: {fileID: 4229813834633754015}
+  - component: {fileID: 7417043601907637972}
   - component: {fileID: -3602358787953774936}
   m_Layer: 0
   m_Name: Leaf
@@ -114,19 +114,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.0038066, y: 4.4874897}
   m_EdgeRadius: 0
---- !u!114 &7417043601907637972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3106132744219655530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dcdbda61fb2be2469e3f65d1b490aa0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
 --- !u!50 &4229813834633754015
 Rigidbody2D:
   serializedVersion: 4
@@ -148,6 +135,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7417043601907637972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3106132744219655530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dcdbda61fb2be2469e3f65d1b490aa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  leafParticles: {fileID: 6545222911609183665, guid: 55b653fc6c4b5994889e085fa1c35b81, type: 3}
 --- !u!114 &-3602358787953774936
 MonoBehaviour:
   m_ObjectHideFlags: 0

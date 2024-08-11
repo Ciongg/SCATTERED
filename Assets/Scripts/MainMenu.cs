@@ -46,6 +46,8 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Resetted Prefs");
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
+        currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
+        UpdateLeafText();
     }
 
     
