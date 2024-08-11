@@ -3,19 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI lifeText;
+    public TextMeshProUGUI leafText;
     public int score = 0;
     public int life = 3;
+    public int leaf = 0; //for ingame text
+    int currentleaf; //for saved data also shown i nmenu
+
+    //currentleaf = menu
+    //leaf = game
+
+    //get the currentleaf and put it in the game
 
     // Start is called before the first frame update
     void Start()
     {
+        currentleaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateScoreText();
         UpdateLifeText();
+        UpdateLeafText();
         
 
     }
@@ -26,6 +36,14 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void LoadCurrentLeaf(){
+
+    }
+
+    public void SaveLeafCount(){
+        PlayerPrefs.SetInt("LeafCount", currentleaf);
+        PlayerPrefs.Save();
+    }
 
     public void AddScore(int points){
         score += points;
@@ -33,11 +51,21 @@ public class GameManager : MonoBehaviour
     }
 
     public void LoseLife(int lifeDeduct){
-        life -= lifeDeduct;
-        if (life < 0){
+        life += lifeDeduct;
+        if (life <= 0){
             life = 0;
+            SaveLeafCount();
+            SceneManager.LoadSceneAsync(0);
         }
         UpdateLifeText();
+        
+    }
+
+    public void AddLeaf(int leafGained){
+        leaf += leafGained; //adds to game
+        currentleaf += leafGained; //adds to playerprefs
+        UpdateLeafText();
+
     }
 
     void UpdateScoreText(){
@@ -48,6 +76,10 @@ public class GameManager : MonoBehaviour
         lifeText.text = life.ToString();
     }
 
+    void UpdateLeafText(){
+        leafText.text = leaf.ToString();
+    }
+
     public int GetScore(){
         return score;
     }
@@ -55,5 +87,9 @@ public class GameManager : MonoBehaviour
      public int GetLife()
     {
         return life;
+    }
+
+    public int GetLeaf(){
+        return leaf;
     }
 }

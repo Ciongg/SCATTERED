@@ -8,6 +8,7 @@ TagManager:
   - Biodegradable
   - NonBiodegradable
   - Toxic
+  - Leaf
   layers:
   - Default
   - TransparentFX

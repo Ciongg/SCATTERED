@@ -12,7 +12,8 @@ public class Trashcan : MonoBehaviour
     
     public GameObject particlePrefab;
     public GameObject wrongParticlePrefab;
-    public GameManager gameManager;
+    GameManager gameManager;
+    public Collider2D trashBinCollider; 
 
     // Start is called before the first frame update
     void Start()
@@ -42,10 +43,16 @@ public class Trashcan : MonoBehaviour
             PlayParticle();
     }
 
+    
     void OnTriggerEnter2D(Collider2D collider) {
 
-        
+        if(collider.tag == "Leaf"){
+            return;
+        }
+
         if(isBiodegradable){
+        
+        
 
         if(collider.tag != "Biodegradable"){
             WrongAnswer(collider);
@@ -58,7 +65,7 @@ public class Trashcan : MonoBehaviour
 
 
         if(isNotBiodegradable){
-
+        
         if(collider.tag != "NonBiodegradable"){
             WrongAnswer(collider);
             
@@ -69,7 +76,7 @@ public class Trashcan : MonoBehaviour
         }
 
         if(isToxic){
-
+        
         if(collider.tag != "Toxic"){
             WrongAnswer(collider);
             
@@ -85,8 +92,16 @@ public class Trashcan : MonoBehaviour
 
 
     void PlayParticle(){
-        GameObject particleSystemInstance = Instantiate(particlePrefab, transform.position, Quaternion.identity);
+
+
+                Vector3 colliderBounds = trashBinCollider.bounds.size;
+                Vector3 topPosition = trashBinCollider.bounds.center + new Vector3(0, colliderBounds.y / 2, 0);
+
+                GameObject particleSystemInstance = Instantiate(particlePrefab, topPosition, Quaternion.Euler(-90f, 0f, 0f));
+
                 ParticleSystem ps = particleSystemInstance.GetComponent<ParticleSystem>();
+
+                
                 ps.Play();
                 
                 // Destroy the particle system after it has played to clean up

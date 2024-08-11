@@ -6,10 +6,9 @@ public class Objects : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject[] prefabs;
-    public float timeBetweenSpawn;
     public float minForce = 300f; // Minimum force
     public float maxForce = 700f; // Maximum force
-    public float baseTimeBetweenSpawn = 2f;
+    public float baseTimeBetweenSpawn = 4f;
     public int phase1ScoreThreshold = 50;
     public int phase2ScoreThreshold = 100;
     float nextSpawnTime;
@@ -33,21 +32,26 @@ public class Objects : MonoBehaviour
 
     void Update()
     {
+        AdjustDifficulty();
+        
         if (Time.time > nextSpawnTime)
         {
             SpawnTrash();
-            AdjustDifficulty();
             nextSpawnTime = Time.time + baseTimeBetweenSpawn;
         }
     }
 
     void SpawnTrash()
     {
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
-        int maxIndex = GetMaxPrefabIndex();
+        
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)]; //pick one random spawnpoint from array and get the pos
+        Quaternion randomRotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f)); // random rotation
+
+        int maxIndex = GetMaxPrefabIndex(); //para dun sa phases
         trash = Instantiate(prefabs[Random.Range(0, maxIndex)], spawnPoint.position, randomRotation);
+
         Rigidbody2D rb = trash.GetComponent<Rigidbody2D>();
+
         if (rb != null)
         {
             float randomForce = Random.Range(minForce, maxForce);
@@ -62,16 +66,16 @@ public class Objects : MonoBehaviour
     }
 
     void UpdateMap(int currentPhase){
-        // Ensure phaseStart is always active at the start
-
         
+
+        //sets phase if currentphase == phase
 
         phasestart.SetActive(currentPhase == 0);
 
-        // Manage phase 1 visibility
+        
         phase1.SetActive(currentPhase == 1);    
 
-        // Manage phase 2 visibility
+        
         phase2.SetActive(currentPhase == 2);
 
         
@@ -82,16 +86,16 @@ public class Objects : MonoBehaviour
 
         if (score >= phase2ScoreThreshold){
             SetPhase(2);
-            baseTimeBetweenSpawn = 1f;
+            baseTimeBetweenSpawn = 3f;
         }else if (score >= phase1ScoreThreshold){
             SetPhase(1);
-            baseTimeBetweenSpawn = 1.5f;
+            baseTimeBetweenSpawn = 3.5f;
         }
     }
 
     int GetMaxPrefabIndex(){
         int score = gameManager.GetScore();
-
+        //returns the maxindex taken to go over the arrays in trash prefabs
         if (score >= phase2ScoreThreshold){
             return 5;
         }else if(score >= phase1ScoreThreshold){

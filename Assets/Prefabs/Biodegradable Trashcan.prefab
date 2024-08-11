@@ -144,5 +144,6 @@ MonoBehaviour:
   isBiodegradable: 1
   isNotBiodegradable: 0
   isToxic: 0
-  particlePrefab: {fileID: 175859043724109382, guid: 6c0b3a4b9148cb44e9e0c9a6e3ab4447, type: 3}
+  particlePrefab: {fileID: 5237543344863476034, guid: c2bdc924cda5eee4d94295708a8342e5, type: 3}
   wrongParticlePrefab: {fileID: 8908775213319364053, guid: a2cc05db74ddc10489ac655cfed2a07b, type: 3}
+  trashBinCollider: {fileID: 4830941766031816153}

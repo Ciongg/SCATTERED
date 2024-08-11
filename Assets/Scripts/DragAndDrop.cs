@@ -118,6 +118,7 @@ using UnityEngine.EventSystems;
 
 public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+    public GameManager gameManager;
     private SpriteRenderer spriteRenderer;
     private Vector3 offset;
     private Rigidbody2D rb;
@@ -127,17 +128,31 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public float frequency = 5.0f;
     public bool drawDragLine = true;
     public Color lineColor = Color.red;
-    
+    public string originalTag;
 
     void Start()
     {
+        
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        
+        originalTag = gameObject.tag;
+        gameObject.tag = "Untagged";
+        
+    }
+
+    void Update(){
+        
+           
         
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+
+         gameObject.tag = originalTag;
+        
         //sets color when drag begins
         Color currentColor = spriteRenderer.color;
         currentColor.a = 0.5f;
@@ -164,6 +179,7 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
+
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(eventData.position);
         // Vector3 targetPosition = worldMousePosition + offset;
 
@@ -179,6 +195,7 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        
         Color currentColor = spriteRenderer.color;
         currentColor.a = 1f;
         spriteRenderer.color = currentColor;
@@ -196,6 +213,7 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     {
         if (collision.collider.CompareTag("Deadly"))
         {
+            gameManager.LoseLife(1);
             Destroy(gameObject);
         }
     }

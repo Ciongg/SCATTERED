@@ -2,9 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
+    public TextMeshProUGUI leafText;
+    public int leaf = 0;
+    public int currentLeaf = 0;
+    void Start(){
+        leaf = PlayerPrefs.GetInt("LeafCount", 0);
+        currentLeaf += leaf;
+        UpdateLeafText();
+
+    }
+
+    void UpdateLeafText(){
+        leafText.text = currentLeaf.ToString();
+    }
+
+
     public void PlayGame()
     {
         SceneManager.LoadSceneAsync(1);
