@@ -36,9 +36,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void LoadCurrentLeaf(){
 
-    }
 
     public void SaveLeafCount(){
         PlayerPrefs.SetInt("LeafCount", currentleaf);
@@ -51,7 +49,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void LoseLife(int lifeDeduct){
-        life -= lifeDeduct;
+        life += lifeDeduct;
         if (life <= 0){
             life = 0;
             SaveLeafCount();

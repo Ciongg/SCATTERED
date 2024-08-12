@@ -32,7 +32,8 @@ public class Objects : MonoBehaviour
 
     void Update()
     {
-        AdjustDifficulty();
+        int score = gameManager.GetScore();
+        AdjustDifficulty(score);
         
         if (Time.time > nextSpawnTime)
         {
@@ -81,8 +82,8 @@ public class Objects : MonoBehaviour
         
     }
 
-    void AdjustDifficulty(){
-        int score = gameManager.GetScore();
+    void AdjustDifficulty(int score){
+        
 
         if (score >= phase2ScoreThreshold){
             SetPhase(2);
@@ -92,6 +93,18 @@ public class Objects : MonoBehaviour
             baseTimeBetweenSpawn = 3.5f;
         }
     }
+
+    // void AdjustTrashSpawnSpeed(int score){
+         
+
+    //     if (score >= phase2ScoreThreshold){
+    //         SetPhase(2);
+    //         baseTimeBetweenSpawn = 3f;
+    //     }else if (score >= phase1ScoreThreshold){
+    //         SetPhase(1);
+    //         baseTimeBetweenSpawn = 3.5f;
+    //     }
+    // }
 
     int GetMaxPrefabIndex(){
         int score = gameManager.GetScore();
