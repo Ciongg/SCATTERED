@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4672303196470729123}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.6876, y: -8.3776, z: 0}
-  m_LocalScale: {x: 3.9138, y: 3.9138, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -120,11 +120,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4958c6c2d43973d4bb6315c596fa4714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   isDragging: 0
   damping: 30
   frequency: 1
   drawDragLine: 1
   lineColor: {r: 1, g: 0, b: 0, a: 1}
+  originalTag: 
 --- !u!70 &3803509901105189250
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -139,5 +141,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.106257625, y: 0.090324685}
-  m_Size: {x: 0.280726, y: 0.46306774}
+  m_Size: {x: 0.4, y: 0.55}
   m_Direction: 0

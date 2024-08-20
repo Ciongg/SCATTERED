@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Segregation 2.unity
     guid: af9ce113ea2b1d84bb1111cf1bc393b0
+  - enabled: 1
+    path: Assets/Scenes/Garden.unity
+    guid: af513d6dfe78d6c4e9d082c45cfb13c5
   m_configObjects: {}

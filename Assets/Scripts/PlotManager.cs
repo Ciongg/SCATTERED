@@ -13,7 +13,7 @@ public class PlotManager : MonoBehaviour
           if (placedPlant == null) // Check if no pot is currently placed
         {
             placedPlant = Instantiate(plantPrefab, transform.position, Quaternion.identity);
-            // sp.enabled = false;
+            sp.enabled = false;
             // You can also set the parent of the pot to this spot if needed
             // placedPot.transform.SetParent(transform);
         }

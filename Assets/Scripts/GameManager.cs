@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI lifeText;
     public TextMeshProUGUI leafText;
     public int score = 0;
-    public int life = 3;
+    public int life = 5;
     public int leaf = 0; //for ingame text
     int currentleaf; //for saved data also shown i nmenu
 
@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void MainMenu(){
+        SceneManager.LoadSceneAsync(0);
+    }
+
 
 
     public void SaveLeafCount(){
@@ -49,7 +53,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void LoseLife(int lifeDeduct){
-        life += lifeDeduct;
+        life -= lifeDeduct;
         if (life <= 0){
             life = 0;
             SaveLeafCount();

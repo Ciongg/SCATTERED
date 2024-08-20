@@ -31,6 +31,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync(2);
     }
 
+    public void PlayGarden()
+    {
+        SceneManager.LoadSceneAsync(3);
+    }
+
     public void Main()
     {
         SceneManager.LoadSceneAsync(0);

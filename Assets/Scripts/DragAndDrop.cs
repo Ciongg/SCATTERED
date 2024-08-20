@@ -1,120 +1,6 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using UnityEngine.UI;
-// using UnityEngine.EventSystems;
-// using System;
-// using Unity.VisualScripting;
-
-// public class DragAndDrop : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandler
-// {
-//     // private RectTransform rectTransform;
-//      private SpriteRenderer spriteRenderer;
-//      private Vector3 offset;
-//      public Rigidbody2D rb;
-//      public bool isDragging = false;
-//      public float maxSpeed = 5f;
-
-
-
-//     public void OnBeginDrag(PointerEventData eventData)
-//     {
-//         ;
-//         spriteRenderer.color=new Color(200, 0, 0, 1f);
-        
-//         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z));
-//         offset = transform.position - worldMousePosition;
-
-
-        
-//         rb.simulated = false;
-//         isDragging = true;
-//     }
-
-
-
-//     public void OnDrag(PointerEventData eventData)
-//     {
-        
-//         rb.gravityScale = 0;
-
-//         Vector3 screenPoint = Input.mousePosition;
-//         screenPoint.z = Camera.main.WorldToScreenPoint(transform.position).z; // Preserve the Z position
-//         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(screenPoint);
-
-//         Vector3 targetPosition = worldMousePosition + offset;
-
-//         rb.simulated = true;
-
-//         rb.MovePosition(targetPosition);
-        
-        
-//         // transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-//     }
-
-
-
-//     public void OnEndDrag(PointerEventData eventData)
-//     {
-        
-
-
-//         if(isDragging){
-//         rb.gravityScale = 0;
-
-//         Vector2 dragStartPosition = eventData.pressPosition;
-//         Vector2 dragEndPosition = eventData.position;
-//         Vector2 dragDelta = (dragEndPosition - dragStartPosition) / Time.deltaTime;
-
-//         if(dragDelta.magnitude > maxSpeed){
-//             dragDelta = dragDelta.normalized * maxSpeed;
-//         }
-
-        
-//         rb.gravityScale = 1;
-//         rb.AddForce(dragDelta, ForceMode2D.Impulse);
-
-//         rb.simulated = true;
-//         rb.drag = 0.5f;
-        
-//         }
-
-//         spriteRenderer.color = Color.red;
-//         isDragging = false;
-
-//     }
-
-//     void Start()
-//     {
-//         // rectTransform = GetComponent<Transform>();
-        
-//         spriteRenderer = GetComponent<SpriteRenderer>();
-//     }
-
-
-//     void OnCollisionEnter2D(Collision2D collision){
-//             if(collision.collider.tag == "Deadly"){
-//                 Destroy(gameObject);
-//             }
-//     }
-
-//     void Update() {
-//         Debug.Log(rb.gravityScale);
-//     }
-
-
-    
-   
-// }
-
-
-
-
-
-
-
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -130,39 +16,59 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public Color lineColor = Color.red;
     public string originalTag;
 
+    private static Dictionary<int, DragAndDrop> activeDrags = new Dictionary<int, DragAndDrop>();
+
     void Start()
     {
-        
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        
+
         originalTag = gameObject.tag;
         gameObject.tag = "Untagged";
-        
     }
 
-    void Update(){
-        
-           
-        
+    void Update()
+    {
+        // Update dragging for all active drags
+        foreach (var kvp in activeDrags)
+        {
+            int pointerId = kvp.Key;
+            DragAndDrop drag = kvp.Value;
+
+            if (drag.isDragging)
+            {
+                for (int i = 0; i < Input.touchCount; i++)
+                {
+                    Touch touch = Input.GetTouch(i);
+                    if (touch.fingerId == pointerId)
+                    {
+                        Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(touch.position);
+                        drag.targetJoint.target = worldMousePosition;
+
+                        if (drag.drawDragLine)
+                        {
+                            Debug.DrawLine(drag.targetJoint.transform.TransformPoint(drag.targetJoint.anchor), worldMousePosition, drag.lineColor);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        gameObject.tag = originalTag;
 
-         gameObject.tag = originalTag;
-        
-        //sets color when drag begins
         Color currentColor = spriteRenderer.color;
         currentColor.a = 0.5f;
         spriteRenderer.color = currentColor;
 
-
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(eventData.position);
         offset = transform.position - worldMousePosition;
 
-        // Create tThe joint
+        // Create the joint
         if (targetJoint == null)
         {
             targetJoint = gameObject.AddComponent<TargetJoint2D>();
@@ -175,27 +81,22 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         targetJoint.anchor = targetJoint.transform.InverseTransformPoint(worldMousePosition);
 
         isDragging = true;
+        activeDrags[eventData.pointerId] = this; // Track drag instance by pointerId
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(eventData.position);
-        // Vector3 targetPosition = worldMousePosition + offset;
-
-        // Move the Rigidbody using the targetjoint
         targetJoint.target = worldMousePosition;
 
         if (drawDragLine)
         {
-            //parameters start, end, color
             Debug.DrawLine(targetJoint.transform.TransformPoint(targetJoint.anchor), worldMousePosition, lineColor);
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        
         Color currentColor = spriteRenderer.color;
         currentColor.a = 1f;
         spriteRenderer.color = currentColor;
@@ -207,14 +108,17 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             Destroy(targetJoint);
             targetJoint = null;
         }
+
+        activeDrags.Remove(eventData.pointerId); // Remove drag instance by pointerId
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Deadly"))
+        if (collision.collider.tag == "Deadly")
         {
             gameManager.LoseLife(1);
             Destroy(gameObject);
         }
     }
+
 }
