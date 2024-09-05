@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI lifeText;
     public TextMeshProUGUI leafText;
     public int score = 0;
-    public int life = 5;
+    public int life = 120;
     public int leaf = 0; //for ingame text
     int currentleaf; //for saved data also shown i nmenu
 
@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 60;
         currentleaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateScoreText();
         UpdateLifeText();

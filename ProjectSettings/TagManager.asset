@@ -9,6 +9,11 @@ TagManager:
   - NonBiodegradable
   - Toxic
   - Leaf
+  - SwipeTrigger
+  - PlantPot
+  - Item
+  - gaollium
+  - sunflower
   layers:
   - Default
   - TransparentFX
