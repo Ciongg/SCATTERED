@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public int maxStackedItems = 4;
+    public int maxStackedItems = 5;
     public InventorySlot [] inventorySlots; //gets all available inventory slots in heirarchy
     public GameObject InventoryItemPrefab; // gets the inventory item prefab
 
