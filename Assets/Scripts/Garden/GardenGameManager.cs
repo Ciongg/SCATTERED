@@ -13,12 +13,12 @@ public class GardenGameManager : MonoBehaviour
     private Transform plantPrefab;
 
     public bool isInitialized;
-    
+    public bool isAlreadyPlanted;
     void Start()
     {
-       
         countText.enabled = false;
         isInitialized = false;
+        isAlreadyPlanted = false;
     }
 
     void Update()
@@ -28,6 +28,8 @@ public class GardenGameManager : MonoBehaviour
         {
             // Find the Pot object in the scene
             pot = GameObject.Find("Pot");
+
+        
             spawn = pot.transform.Find("Spawn");
 
                 if (spawn != null && spawn.childCount > 0) // Check if spawn exists and has children
@@ -40,7 +42,7 @@ public class GardenGameManager : MonoBehaviour
                         if (plantTap != null)
                         {
                             InitializeCount();
-                            
+                            isAlreadyPlanted = true;
                             isInitialized = true;
                              // Set the flag to true to prevent further runs
                         }

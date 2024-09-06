@@ -42,12 +42,14 @@ public class Basket : MonoBehaviour
 
     public void SlideIn()
     {
+        
         gameManager.countText.enabled = false;
         // Start sliding animation
         StartCoroutine(SlideToPosition(endOnScreenPosition, slideDuration));
     }
 
     public void SlideOut(){
+        gameManager.isAlreadyPlanted = false;
         StartCoroutine(SlideToPosition(startOffScreenPosition, slideDuration));
     }
 

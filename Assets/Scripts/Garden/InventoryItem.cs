@@ -17,10 +17,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector]public Transform parentAfterDrag; //the transform position of the object before drag
 
     private PlantPot plantPot;
-
+    GardenGameManager gameManager;
     public void Start()
     {
         plantPot = GameObject.Find("Pot").GetComponent<PlantPot>();
+        gameManager = GameObject.Find("GardenGameManager").GetComponent<GardenGameManager>();
+        
     }
 
     // Function to grab scriptable object as parameter and grab its image
@@ -75,17 +77,17 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
 
         
-        if(IsOverPlantPot()){
-             
+        if(IsOverPlantPot() && gameManager.isAlreadyPlanted == false){
+             Debug.Log("PLANTED SEED!");
             switch (item.type)
         {
             case ItemType.Seed:
-                Debug.Log("Seed");
+                
                  plantPot.PlantSeed(item.type);
                 break;
 
             case ItemType.Tool:
-                Debug.Log("Tool");
+                
                 break;
 
             default:
@@ -106,7 +108,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             
             
         }else{
-
+        Debug.Log("COULDNT PLANT");
         transform.SetParent(parentAfterDrag); 
         //return dragged object to original parent stored earlier
         //unless InventorySlot Script is ran

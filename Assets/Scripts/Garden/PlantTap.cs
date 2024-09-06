@@ -43,7 +43,9 @@ public class PlantTap : MonoBehaviour
         UpdatePlantStage(0);
 
         plantGrabCollider.enabled = false; 
+        
         gameManager.isInitialized = false;
+        gameManager.isAlreadyPlanted = true;
 
         donateButton = donateButtonObject.GetComponent<Button>();
         donateButton.interactable = false;
@@ -154,6 +156,7 @@ public class PlantTap : MonoBehaviour
 
         // disable donatebutton and slide in basket
         donateButton.interactable = false;
+        
         basket.SlideIn();
         
     }

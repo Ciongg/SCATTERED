@@ -14,7 +14,6 @@ public class Item : ScriptableObject
 
 }
 
-
 //creates drop downs
 public enum ItemType{
     Seed,
