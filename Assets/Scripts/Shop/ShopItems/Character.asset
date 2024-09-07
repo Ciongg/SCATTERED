@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 21300000, guid: 471777006ec74374da83edfb05c1b404, type: 3}
   type: 1
+  cost: 50
+  rarity: 1

@@ -6,12 +6,12 @@ using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
-    public TextMeshProUGUI leafText;
-    public int leaf = 0;
+    [HideInInspector] TextMeshProUGUI leafText;
+    
     public int currentLeaf = 0;
     void Start(){
-        leaf = PlayerPrefs.GetInt("LeafCount", 0);
-        currentLeaf += leaf;
+        leafText = GameObject.Find("LeafText").GetComponent<TextMeshProUGUI>();
+        currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateLeafText();
 
     }
@@ -34,6 +34,11 @@ public class MainMenu : MonoBehaviour
     public void PlayGarden()
     {
         SceneManager.LoadSceneAsync(3);
+    }
+
+    public void PlayShop()
+    {
+        SceneManager.LoadSceneAsync(4);
     }
 
     public void Main()

@@ -9,7 +9,9 @@ public class ShopItem : ScriptableObject
 {
   public Sprite image;
   public ShopItemType type;
-    
+  public int cost;
+  public Rarity rarity;
+  
 }
 
 public enum ShopItemType{
@@ -18,3 +20,11 @@ public enum ShopItemType{
   Background,
 
 }
+
+public enum Rarity{
+  Basic,
+  Rare,
+  Legendary,
+}
+
+

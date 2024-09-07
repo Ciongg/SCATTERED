@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
 public class Basket : MonoBehaviour
 {
     public float slideDuration = 1.0f; // Duration of the slide animation in seconds
@@ -28,6 +28,7 @@ public class Basket : MonoBehaviour
                 Destroy(collider.gameObject);
 
                 SlideOut();
+                ClearPlantDataFile();
             break;
 
             case "sunflower":
@@ -35,11 +36,22 @@ public class Basket : MonoBehaviour
                 Destroy(collider.gameObject);
 
                 SlideOut();
+                ClearPlantDataFile();
             break;
 
         }
     }
 
+
+
+    private void ClearPlantDataFile()
+{
+    if (File.Exists(gameManager.filePath))
+    {
+        File.Delete(gameManager.filePath);
+        Debug.Log("Plant data file cleared.");
+    }
+}
     public void SlideIn()
     {
         

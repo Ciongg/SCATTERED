@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4912499419038247704
 Transform:
   m_ObjectHideFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4912499419065435069
 Transform:
   m_ObjectHideFlags: 0
@@ -309,9 +309,8 @@ MonoBehaviour:
   - {fileID: 4912499419065435070}
   - {fileID: 4912499419397092968}
   - {fileID: 4912499419038247705}
-  tapPower: 1
   currentTaps: 0
-  countText: {fileID: 0}
+  seedName: 
 --- !u!61 &2590127525707357639
 BoxCollider2D:
   m_ObjectHideFlags: 0

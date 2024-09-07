@@ -57,9 +57,8 @@ MonoBehaviour:
   - {fileID: 4736877036663462475}
   - {fileID: 4736877035938082717}
   - {fileID: 4736877036287881964}
-  tapPower: 1
   currentTaps: 0
-  countText: {fileID: 0}
+  seedName: 
 --- !u!61 &2765645449482011698
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -258,7 +257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4736877036287881965
 Transform:
   m_ObjectHideFlags: 0
@@ -342,7 +341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4736877036663462472
 Transform:
   m_ObjectHideFlags: 0

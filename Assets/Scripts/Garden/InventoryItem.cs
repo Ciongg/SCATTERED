@@ -78,7 +78,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         
         if(IsOverPlantPot() && gameManager.isAlreadyPlanted == false){
-             Debug.Log("PLANTED SEED!");
+             
             switch (item.type)
         {
             case ItemType.Seed:
@@ -108,7 +108,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             
             
         }else{
-        Debug.Log("COULDNT PLANT");
+        
         transform.SetParent(parentAfterDrag); 
         //return dragged object to original parent stored earlier
         //unless InventorySlot Script is ran

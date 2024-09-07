@@ -6,19 +6,14 @@ public class ItemInShop : MonoBehaviour
 {
     public ShopItem item;
     public Image image;
-    
 
     public void InitialiseItem(ShopItem newItem)
     {
         
         item = newItem;
         image.sprite = newItem.image;
-            
+           
     }
 
-
-    
-
-    
 
 }

@@ -22,34 +22,62 @@ public class PlantTap : MonoBehaviour
     private ParticleSystem tapParticleEffect;
     GameObject donateButtonObject;
 
+    public string seedName;
+    
+
+    public int GetCurrentGrowthStage()
+    {
+        return currentStage;
+    }
+
+    public void SetGrowthStage(int growthStage)
+    {
+        currentStage = growthStage;
+        UpdatePlantStage(growthStage);
+    }
+
+
+
     public void Start()
     {
-        tapParticleEffect = GetComponentInChildren<ParticleSystem>();
+        //set seedname for checking of prefab in gardengamemanager
+        //is trimmed of (Clone) tag for proper hcecking
+        seedName = gameObject.name.Replace("(Clone)", "").Trim();
+        
 
-        plantCollider = GetComponent<BoxCollider2D>();
-
-        plantGrabCollider = GetComponent<PolygonCollider2D>();
-                    
+        //Disble rigidbody movements but still have it enabled
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         rb.gravityScale = 0;
+        
+        tapParticleEffect = GetComponentInChildren<ParticleSystem>();
+        plantCollider = GetComponent<BoxCollider2D>();
+        plantGrabCollider = GetComponent<PolygonCollider2D>();
 
         gameManager = GameObject.Find("GardenGameManager").GetComponent<GardenGameManager>();
-         
         basket = GameObject.Find("Basket").GetComponent<Basket>();
-         
         donateButtonObject = GameObject.Find("DonateButton");
+        donateButton = donateButtonObject.GetComponent<Button>();
 
-        UpdatePlantStage(0);
-
-        plantGrabCollider.enabled = false; 
         
+        //Initializations
+        plantGrabCollider.enabled = false; 
         gameManager.isInitialized = false;
         gameManager.isAlreadyPlanted = true;
 
-        donateButton = donateButtonObject.GetComponent<Button>();
+        if(currentTaps >= tapRequired){
+        donateButton.interactable = true;
+        }else{
         donateButton.interactable = false;
+        }
+
         donateButton.onClick.AddListener(OnDonateButtonClicked);
+        
+        gameManager.countText.enabled = true;
+        gameManager.UpdateCount();
+        gameManager.SavePlantData();
+
+        
 
     }
 
@@ -122,6 +150,8 @@ public class PlantTap : MonoBehaviour
             // Enable the donate button since requirement is met
             donateButton.interactable = true;
         }
+
+        gameManager.SavePlantData();
     }
 
 
@@ -161,7 +191,7 @@ public class PlantTap : MonoBehaviour
         
     }
 
-    private void UpdatePlantStage(int growthStage)
+    public void UpdatePlantStage(int growthStage)
     {
         // Disable all stages first
         for (int i = 0; i < plantStages.Length; i++)
