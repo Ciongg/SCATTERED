@@ -8,6 +8,7 @@ public class DemoScript : MonoBehaviour
 
     public Item[] itemsToPickup;
     public int currentBasicSeed;
+    public int currentUncommonSeed;
     public int currentRareSeed;
     public int currentLegendarySeed;
 
@@ -25,17 +26,26 @@ public class DemoScript : MonoBehaviour
         
 
         currentBasicSeed = PlayerPrefs.GetInt("BasicSeedCount", 0);
+        currentUncommonSeed = PlayerPrefs.GetInt("UncommonSeedCount", 0);
         currentRareSeed = PlayerPrefs.GetInt("RareSeedCount", 0);
         currentLegendarySeed = PlayerPrefs.GetInt("LegendarySeedCount", 0);
 
        
-        for (int i = 0; i < currentRareSeed; i++)
+        for (int i = 0; i < currentBasicSeed; i++)
         {
             PickupItem(0);
         }
-        for (int i = 0; i < currentBasicSeed; i++)
+        for (int i = 0; i < currentUncommonSeed; i++)
         {
             PickupItem(1);
+        }
+        for (int i = 0; i < currentRareSeed; i++)
+        {
+            PickupItem(2);
+        }
+        for (int i = 0; i < currentLegendarySeed; i++)
+        {
+            PickupItem(3);
         }
 
         

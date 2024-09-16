@@ -10,7 +10,7 @@ public class PlantTap : MonoBehaviour
     public int tapRequired;
     public GameObject[] plantStages; // Array to hold plant stages
 
-    public int currentTaps = 0;
+    public float currentTaps = 0;
     private int currentStage = 0;
 
     private BoxCollider2D plantCollider;

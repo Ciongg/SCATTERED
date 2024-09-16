@@ -11,6 +11,7 @@ public class ShopManager : MonoBehaviour
     public TextMeshProUGUI leafCountText;
     public int currentLeaf;
     public int currentBasicSeed;
+    public int currentUncommonSeed;
     public int currentRareSeed;
     public int currentLegendarySeed;
 
@@ -19,14 +20,31 @@ public class ShopManager : MonoBehaviour
     void Start(){
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateLeafText();
-        RefreshShop();
+
+         if (PlayerPrefs.GetInt("IsShopRefreshed", 0) == 0)
+        {
+        // This is the first time; refresh the shop
+        StartCoroutine(RefreshShopCoroutine());
+
+        // Set the flag so that the shop won't auto-refresh again
+        PlayerPrefs.SetInt("IsShopRefreshed", 1);
+        PlayerPrefs.Save();
+        }
+        else
+        {
+            // Load saved shop slots if it's not the first time
+            LoadShopSlots();
+        }
+
+        
 
         //Get the number of seeds based on their rarity as int
         currentBasicSeed = PlayerPrefs.GetInt("BasicSeedCount", 0);
+        currentUncommonSeed = PlayerPrefs.GetInt("UncommonSeedCount", 0);
         currentRareSeed = PlayerPrefs.GetInt("RareSeedCount", 0);
         currentLegendarySeed = PlayerPrefs.GetInt("LegendarySeedCount", 0);
-        //reload saved shop slots
-        LoadShopSlots();
+        
+        
     }
 
     private void SaveShopSlots(){
@@ -36,15 +54,23 @@ public class ShopManager : MonoBehaviour
             // grabs the item in the slot with the script ItemInShop
              ItemInShop itemInSlot = inventorySlots[i].GetComponentInChildren<ItemInShop>();
 
-              if (itemInSlot != null)
-            {
-                PlayerPrefs.SetString("ShopSlot_" + i, itemInSlot.item.name); 
-            }
-            else
-            {
-                PlayerPrefs.DeleteKey("ShopSlot_" + i);
-            }
-        }
+              if (itemInSlot == null)
+                {
+                    Debug.Log("Deleting Slot: " + i + " (No item in slot)");
+                    PlayerPrefs.DeleteKey("ShopSlot_" + i);  // Delete the saved item for this slot
+                }
+                else if (itemInSlot.item == null)
+                {
+                    Debug.Log("Deleting Slot: " + i + " (ItemInShop exists, but item is null)");
+                    PlayerPrefs.DeleteKey("ShopSlot_" + i);  // Delete the saved item for this slot
+                }
+                else
+                {
+                    // Save the name of the item in the slot
+                    Debug.Log("Saving Slot: " + i + " (Item: " + itemInSlot.item.name + ")");
+                    PlayerPrefs.SetString("ShopSlot_" + i, itemInSlot.item.name);
+                }
+                }
         PlayerPrefs.Save();
     }
 
@@ -66,17 +92,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    public void UpdateLeafText(){
-        leafCountText.text = PlayerPrefs.GetInt("LeafCount", 0).ToString();
-    }
-
-
-    public void AddLeaf(int amount){
-        currentLeaf += amount;
-        PlayerPrefs.SetInt("LeafCount", currentLeaf);
-        PlayerPrefs.Save();
-        UpdateLeafText();
-    }
+    
 
     public void AddSeed(int amount, Rarity rarity){
 
@@ -87,6 +103,11 @@ public class ShopManager : MonoBehaviour
                 PlayerPrefs.Save();
             break;
 
+            case Rarity.Uncommon:
+                currentUncommonSeed += amount;
+                PlayerPrefs.SetInt("UncommonSeedCount", currentUncommonSeed);
+                PlayerPrefs.Save();
+            break;
             case Rarity.Rare:
                 currentRareSeed += amount;
                 PlayerPrefs.SetInt("RareSeedCount", currentRareSeed);
@@ -109,12 +130,7 @@ public class ShopManager : MonoBehaviour
         
     }
 
-    public void MinusLeaf(int amount){
-        currentLeaf -= amount;
-        PlayerPrefs.SetInt("LeafCount", currentLeaf);
-        PlayerPrefs.Save();
-        UpdateLeafText();
-    }
+    
 
     public bool AddItem(ShopItem item){
 
@@ -158,14 +174,14 @@ public class ShopManager : MonoBehaviour
                 case ShopItemType.Seed:
                 Debug.Log("Purchased Seed");
                 AddSeed(1, item.rarity);
-                Debug.Log(currentBasicSeed + " " + currentRareSeed + " " + currentLegendarySeed);
+                Debug.Log(currentBasicSeed + " " + currentUncommonSeed + " " + currentRareSeed + " " + currentLegendarySeed);
+                
                 break;
 
                 case ShopItemType.Background:
                 Debug.Log("Purchased BG");
                 
                 break;
-
                 case ShopItemType.Character:
                 Debug.Log("Purchased Character");
                 
@@ -174,7 +190,15 @@ public class ShopManager : MonoBehaviour
                 default:
                 Debug.Log("error purchase");
                 break;
+
             }
+                ClearSpecificSlot(index);
+
+                
+        
+                
+
+               
 
             
 
@@ -188,14 +212,30 @@ public class ShopManager : MonoBehaviour
 
 
     public void RefreshShop(){
-         if(currentLeaf >= 50){
-            
-            Debug.Log("Refresh Successful");
-            MinusLeaf(50);
-            StartCoroutine(RefreshShopCoroutine());
-         }else{
-            Debug.Log("Purchase Failed!");
-         }
+
+
+         for (int i = 0; i < inventorySlots.Length; i++)
+        {
+           
+
+              
+
+                 if(currentLeaf >= 50){
+
+                    Debug.Log("Refresh Successful");
+                    MinusLeaf(50);
+                    StartCoroutine(RefreshShopCoroutine());
+
+                }else{
+                    
+                    Debug.Log("Purchase Failed!");
+
+                }
+              
+        }
+
+
+        
     }
 
       private IEnumerator RefreshShopCoroutine()
@@ -203,7 +243,7 @@ public class ShopManager : MonoBehaviour
        
         ClearAllSlots();
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
 
         
         for (int i = 0; i < inventorySlots.Length; i++)
@@ -235,6 +275,51 @@ public class ShopManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
+    }
+
+   private void ClearSpecificSlot(int index)
+    {
+        // Access the specific slot directly by index
+        ShopItemSlot slot = inventorySlots[index];
+
+        // Loop through all children in that slot and destroy them
+        foreach (Transform child in slot.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Start the coroutine to save the shop after a short delay
+        StartCoroutine(SaveAfterClear());
+    }
+
+    private IEnumerator SaveAfterClear()
+    {
+        // Small delay to ensure the objects are fully destroyed
+        yield return new WaitForEndOfFrame();  // Wait until the next frame
+
+        // Now save the shop slots after clearing
+        SaveShopSlots();
+        
+        Debug.Log("Shop slots saved after clearing.");
+    }
+
+    public void UpdateLeafText(){
+        leafCountText.text = PlayerPrefs.GetInt("LeafCount", 0).ToString();
+    }
+
+
+    public void AddLeaf(int amount){
+        currentLeaf += amount;
+        PlayerPrefs.SetInt("LeafCount", currentLeaf);
+        PlayerPrefs.Save();
+        UpdateLeafText();
+    }
+
+    public void MinusLeaf(int amount){
+        currentLeaf -= amount;
+        PlayerPrefs.SetInt("LeafCount", currentLeaf);
+        PlayerPrefs.Save();
+        UpdateLeafText();
     }
 
 }

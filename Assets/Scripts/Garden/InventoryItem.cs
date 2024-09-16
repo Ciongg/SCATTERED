@@ -18,10 +18,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private PlantPot plantPot;
     GardenGameManager gameManager;
+    DemoScript demoScript;
     public void Start()
     {
         plantPot = GameObject.Find("Pot").GetComponent<PlantPot>();
         gameManager = GameObject.Find("GardenGameManager").GetComponent<GardenGameManager>();
+        demoScript = GameObject.Find("TestGroup").GetComponent<DemoScript>();
         
     }
 
@@ -76,14 +78,48 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 countText.raycastTarget = true; // Re-enable raycast on the countText
         }
 
+
+
         
         if(IsOverPlantPot() && gameManager.isAlreadyPlanted == false){
-             
-            switch (item.type)
+            
+        switch (item.type)
         {
             case ItemType.Seed:
+
+                switch(item.rarity)
+                {
+                    case RarityType.Basic:
+                        demoScript.currentBasicSeed -= 1;
+                        PlayerPrefs.SetInt("BasicSeedCount", demoScript.currentBasicSeed);
+                        PlayerPrefs.Save();
+                    break;
+
+                    case RarityType.Uncommon:
+                        demoScript.currentUncommonSeed -= 1;
+                        PlayerPrefs.SetInt("UncommonSeedCount", demoScript.currentUncommonSeed);
+                        PlayerPrefs.Save();
+                    break;
+
+                    case RarityType.Rare:
+                        demoScript.currentRareSeed -= 1;
+                        PlayerPrefs.SetInt("RareSeedCount", demoScript.currentRareSeed);
+                        PlayerPrefs.Save();
+                    break;
+
+                    case RarityType.Legendary:
+                       demoScript. currentLegendarySeed -= 1;
+                        PlayerPrefs.SetInt("LegendarySeedCount", demoScript.currentLegendarySeed);
+                        PlayerPrefs.Save();
+                    break;
+
+                    default:
+                        Debug.LogWarning("Unknown rarity type.");
+                    break;
+                }
+
+                 plantPot.PlantSeed(item.type, item.rarity);
                 
-                 plantPot.PlantSeed(item.type);
                 break;
 
             case ItemType.Tool:
@@ -94,6 +130,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 Debug.LogWarning("Unhandled item type!");
                 break;
         }
+
+
+
             
             if(count > 1){
                 transform.SetParent(parentAfterDrag); 

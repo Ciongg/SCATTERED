@@ -23,6 +23,7 @@ public enum ShopItemType{
 
 public enum Rarity{
   Basic,
+  Uncommon,
   Rare,
   Legendary,
 }

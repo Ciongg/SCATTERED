@@ -2,6 +2,15 @@
 
 using UnityEngine;
 
+[System.Serializable]
+public class Phase
+{
+    public int scoreThreshold;
+    public float timeBetweenSpawn;
+    public int maxPrefabIndex;
+}
+
+
 public class Objects : MonoBehaviour
 {
     public Transform[] spawnPoints;
@@ -9,22 +18,22 @@ public class Objects : MonoBehaviour
     public float minForce = 300f; // Minimum force
     public float maxForce = 700f; // Maximum force
     public float baseTimeBetweenSpawn = 4f;
-    public int phase1ScoreThreshold = 50;
-    public int phase2ScoreThreshold = 100;
     float nextSpawnTime;
     private GameObject trash;
     public GameManager gameManager;
 
-    public GameObject phasestart;
-    public GameObject phase1;
-    public GameObject phase2;
+    public int score;
+
 
     int currentPhase;
+    public Phase[] phases;
+    public GameObject[] phaseGameObjects;
+    
 
     // Update is called once per frame
 
     void Start(){
-        nextSpawnTime = Time.time + baseTimeBetweenSpawn;
+        nextSpawnTime = Time.time + phases[0].timeBetweenSpawn;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         SetPhase(0);
         
@@ -32,13 +41,13 @@ public class Objects : MonoBehaviour
 
     void Update()
     {
-        int score = gameManager.GetScore();
+        score = gameManager.GetScore();
         AdjustDifficulty(score);
         
         if (Time.time > nextSpawnTime)
         {
             SpawnTrash();
-            nextSpawnTime = Time.time + baseTimeBetweenSpawn;
+            nextSpawnTime = Time.time + phases[currentPhase].timeBetweenSpawn;
         }
     }
 
@@ -71,31 +80,16 @@ public class Objects : MonoBehaviour
 
         //sets phase if currentphase == phase
 
-        phasestart.SetActive(currentPhase == 0);
-
-        
-        phase1.SetActive(currentPhase == 1);    
-
-        
-        phase2.SetActive(currentPhase == 2);
-
-        
-    }
-
-    void AdjustDifficulty(int score){
-        
-
-        if (score >= phase2ScoreThreshold){
-            SetPhase(2);
-            baseTimeBetweenSpawn = 3f;
-        }else if (score >= phase1ScoreThreshold){
-            SetPhase(1);
-            baseTimeBetweenSpawn = 3.5f;
+        for (int i = 0; i < phases.Length; i++)
+        {
+            phaseGameObjects[i].SetActive(i == currentPhase);
         }
+
+        
     }
 
-    // void AdjustTrashSpawnSpeed(int score){
-         
+    // void AdjustDifficulty(int score){
+        
 
     //     if (score >= phase2ScoreThreshold){
     //         SetPhase(2);
@@ -106,16 +100,30 @@ public class Objects : MonoBehaviour
     //     }
     // }
 
-    int GetMaxPrefabIndex(){
-        int score = gameManager.GetScore();
-        //returns the maxindex taken to go over the arrays in trash prefabs
-        if (score >= phase2ScoreThreshold){
-            return 5;
-        }else if(score >= phase1ScoreThreshold){
-            return 4;
-        }else{
-            return 2;
+
+    void AdjustDifficulty(int score){
+        
+        for (int i = phases.Length - 1; i >= 0; i--)
+        {
+                Debug.Log(score + " " + phases[i].scoreThreshold);
+
+            if(score >= phases[i].scoreThreshold){
+                
+                if(currentPhase != i){
+                    SetPhase(i);
+                    Debug.Log("Setting phase to " + i);
+                }
+
+                break;
+            }
         }
+       
+    }
+
+   
+
+    int GetMaxPrefabIndex(){
+        return phases[currentPhase].maxPrefabIndex;
     
     }
 }

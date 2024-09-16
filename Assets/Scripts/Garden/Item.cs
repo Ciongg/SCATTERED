@@ -10,6 +10,7 @@ public class Item : ScriptableObject
    public ItemType type;
    public ActionType actionType;
    public bool stackable = true;
+   public RarityType rarity;
 
 }
 
@@ -22,4 +23,11 @@ public enum ItemType{
 public enum ActionType{
     Plant,
     Recycle
+}
+
+public enum RarityType{
+    Basic,
+    Uncommon,
+    Rare,
+    Legendary
 }

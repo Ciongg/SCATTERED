@@ -6,11 +6,11 @@ using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
-    [HideInInspector] TextMeshProUGUI leafText;
+    public TextMeshProUGUI leafText;
     
     public int currentLeaf = 0;
     void Start(){
-        leafText = GameObject.Find("LeafText").GetComponent<TextMeshProUGUI>();
+        
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateLeafText();
 

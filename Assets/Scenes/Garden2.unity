@@ -886,7 +886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 224dda3f0501da8499788c1f92abd60c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxStackedItems: 10
+  maxStackedItems: 64
   inventorySlots:
   - {fileID: 7404970237885491239}
   - {fileID: 2139016939}
@@ -2255,7 +2255,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &589779556
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2725,7 +2725,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 18.300049, y: 19.988007}
+  m_AnchoredPosition: {x: 18.300049, y: 19.987976}
   m_SizeDelta: {x: 178.2963, y: 49.178}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &828127379
@@ -2740,6 +2740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924bb2a265a78f84faf34635e241c349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leafText: {fileID: 0}
   currentLeaf: 0
 --- !u!114 &828127380
 MonoBehaviour:
@@ -3653,8 +3654,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9c761e02689c174280b5ee197e67b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SeedPrefabs:
+  BasicSeedPrefabs:
   - {fileID: 4736877035548749089, guid: 310e191f2e8903c4687a57fbfa90235e, type: 3}
+  UncommonSeedPrefabs:
+  - {fileID: 4736877035548749089, guid: 310e191f2e8903c4687a57fbfa90235e, type: 3}
+  RareSeedPrefabs:
+  - {fileID: 4912499420180002004, guid: 2e94180c088fc624a80de4d23f880f25, type: 3}
+  LegendarySeedPrefabs:
   - {fileID: 4912499420180002004, guid: 2e94180c088fc624a80de4d23f880f25, type: 3}
   spawnPoint: {fileID: 1952373664}
 --- !u!1001 &1072078337
@@ -4468,9 +4474,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryManager: {fileID: 160197610}
   itemsToPickup:
-  - {fileID: 11400000, guid: e8ca4b39614b4c6448403a107ba58048, type: 2}
   - {fileID: 11400000, guid: 986d6977fd8bef742b108637522798b4, type: 2}
+  - {fileID: 11400000, guid: 2d59aeaa7d3cd374191bc72132caed0a, type: 2}
+  - {fileID: 11400000, guid: e8ca4b39614b4c6448403a107ba58048, type: 2}
+  - {fileID: 11400000, guid: b8dc812d46a7eaf4ea07238ee16616e9, type: 2}
   currentBasicSeed: 0
+  currentUncommonSeed: 0
   currentRareSeed: 0
   currentLegendarySeed: 0
 --- !u!114 &1415320046
@@ -4480,7 +4489,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415320043}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -4782,7 +4791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1601981415
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6393,8 +6402,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -286}
-  m_SizeDelta: {x: 419.7046, y: 41.9375}
+  m_AnchoredPosition: {x: -0.000013888, y: -302.49}
+  m_SizeDelta: {x: 497.9312, y: 55.4311}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1983538311
 MonoBehaviour:
@@ -6443,8 +6452,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -10,9 +10,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI lifeText;
     public TextMeshProUGUI leafText;
     public int score = 0;
-    public int life = 120;
+    public int life = 5;
     public int leaf = 0; //for ingame text
     int currentleaf; //for saved data also shown i nmenu
+    float currentTap;
+    public int leafMultiplier;
 
     //currentleaf = menu
     //leaf = game
@@ -22,8 +24,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         Application.targetFrameRate = 60;
         currentleaf = PlayerPrefs.GetInt("LeafCount", 0);
+        leafMultiplier = PlayerPrefs.GetInt("LeafMultiplier", 1);
+
+        currentTap = PlayerPrefs.GetFloat("TapPower", currentTap);
         UpdateScoreText();
         UpdateLifeText();
         UpdateLeafText();
@@ -64,12 +70,13 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void AddLeaf(int leafGained){
-        leaf += leafGained; //adds to game
-        currentleaf += leafGained; //adds to playerprefs
+    public void AddLeaf(int leafGained, int leafMultiplier){
+        leaf += leafGained * leafMultiplier; //adds to game
+        currentleaf += leafGained * leafMultiplier; //adds to playerprefs
         UpdateLeafText();
 
     }
+
 
     void UpdateScoreText(){
         scoreText.text = score.ToString();
@@ -87,12 +94,4 @@ public class GameManager : MonoBehaviour
         return score;
     }
 
-     public int GetLife()
-    {
-        return life;
-    }
-
-    public int GetLeaf(){
-        return leaf;
-    }
 }

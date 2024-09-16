@@ -11,7 +11,7 @@ public class GardenGameManager : MonoBehaviour
     public class PlantData
     {
         public string seedType;
-        public int currentTaps;
+        public float currentTaps;
         public int growthStage;
     }
 
@@ -20,7 +20,7 @@ public class GardenGameManager : MonoBehaviour
     public string filePath;
 
 
-    public int tapPower = 1;
+    public float tapPower = 0;
     private PlantTap plantTap;
     public TextMeshProUGUI countText;
     private GameObject pot;
@@ -46,6 +46,9 @@ public class GardenGameManager : MonoBehaviour
 
     void Start()
     {
+        tapPower = 1;
+
+        tapPower = PlayerPrefs.GetFloat("TapPower", tapPower);
         //initialize pot and spawn 
         pot = GameObject.Find("Pot");
         spawn = pot.transform.Find("Spawn");

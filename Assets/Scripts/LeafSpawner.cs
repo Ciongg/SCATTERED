@@ -6,13 +6,15 @@ public class LeafSpawner : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject[] prefabs;
-    public float minTimeBetweenSpawn = 6f;
-    public float maxTimeBetweenSpawn = 12f;
+    public float minTimeBetweenSpawn = 5f;
+    public float maxTimeBetweenSpawn = 20f;
 
+    public float minusSpawnTime;
     private float nextSpawnTime;
 
     void Start(){
-        nextSpawnTime = Time.time + Random.Range(minTimeBetweenSpawn, maxTimeBetweenSpawn);
+        minusSpawnTime = PlayerPrefs.GetFloat("MinusSpawnTime", 0);
+        nextSpawnTime = Time.time + Random.Range(minTimeBetweenSpawn, maxTimeBetweenSpawn - minusSpawnTime);
     }
 
     void Update()
@@ -20,7 +22,7 @@ public class LeafSpawner : MonoBehaviour
         if (Time.time > nextSpawnTime)
         {
             SpawnObject();
-            nextSpawnTime = Time.time + Random.Range(minTimeBetweenSpawn, maxTimeBetweenSpawn);
+            nextSpawnTime = Time.time + Random.Range(minTimeBetweenSpawn, maxTimeBetweenSpawn - minusSpawnTime);
         }
     }   
 
