@@ -21,11 +21,12 @@ public class ShopManager : MonoBehaviour
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateLeafText();
 
-         if (PlayerPrefs.GetInt("IsShopRefreshed", 0) == 0)
+
+        if (PlayerPrefs.GetInt("IsShopRefreshed", 0) == 0)
         {
         // This is the first time; refresh the shop
         StartCoroutine(RefreshShopCoroutine());
-
+        
         // Set the flag so that the shop won't auto-refresh again
         PlayerPrefs.SetInt("IsShopRefreshed", 1);
         PlayerPrefs.Save();
@@ -34,16 +35,14 @@ public class ShopManager : MonoBehaviour
         {
             // Load saved shop slots if it's not the first time
             LoadShopSlots();
+            LoadShopTexts();
         }
-
-        
 
         //Get the number of seeds based on their rarity as int
         currentBasicSeed = PlayerPrefs.GetInt("BasicSeedCount", 0);
         currentUncommonSeed = PlayerPrefs.GetInt("UncommonSeedCount", 0);
         currentRareSeed = PlayerPrefs.GetInt("RareSeedCount", 0);
         currentLegendarySeed = PlayerPrefs.GetInt("LegendarySeedCount", 0);
-        
         
     }
 
@@ -56,22 +55,51 @@ public class ShopManager : MonoBehaviour
 
               if (itemInSlot == null)
                 {
-                    Debug.Log("Deleting Slot: " + i + " (No item in slot)");
+                    // Debug.Log("Deleting Slot: " + i + " (No item in slot)");
                     PlayerPrefs.DeleteKey("ShopSlot_" + i);  // Delete the saved item for this slot
                 }
                 else if (itemInSlot.item == null)
                 {
-                    Debug.Log("Deleting Slot: " + i + " (ItemInShop exists, but item is null)");
+                    // Debug.Log("Deleting Slot: " + i + " (ItemInShop exists, but item is null)");
                     PlayerPrefs.DeleteKey("ShopSlot_" + i);  // Delete the saved item for this slot
                 }
                 else
                 {
                     // Save the name of the item in the slot
-                    Debug.Log("Saving Slot: " + i + " (Item: " + itemInSlot.item.name + ")");
+                    // Debug.Log("Saving Slot: " + i + " (Item: " + itemInSlot.item.name + ")");
                     PlayerPrefs.SetString("ShopSlot_" + i, itemInSlot.item.name);
                 }
                 }
         PlayerPrefs.Save();
+    }
+
+    private void LoadShopTexts(){
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            ShopItemSlot slot = inventorySlots[i].GetComponent<ShopItemSlot>();
+            ItemInShop itemInShop = slot.GetComponentInChildren<ItemInShop>();
+            ShopItem item = itemInShop.item;
+
+            if(item != null){
+                    
+                    TextMeshProUGUI[] texts = itemInShop.GetComponentsInChildren<TextMeshProUGUI>();
+
+                if (texts.Length >= 2)
+                {
+                        // Assuming the first text is for rarity and the second is for price
+                    TextMeshProUGUI priceText = texts[0];
+                    TextMeshProUGUI rarityText = texts[1];
+
+                        // Update the rarity and price text based on the item's details
+                    rarityText.text = item.rarity.ToString() + " seed"; // Display the rarity
+                    priceText.text = item.cost + " leaves";   // Display the price
+                }
+                else
+                {
+                    Debug.LogWarning("Slot does not have enough TextMeshPro components for rarity and price.");
+                }
+            }
+        }
     }
 
     private void LoadShopSlots()
@@ -87,6 +115,8 @@ public class ShopManager : MonoBehaviour
                 if (item != null)
                 {
                     AddItem(item);
+
+                  
                 }
             
         }
@@ -150,17 +180,19 @@ public class ShopManager : MonoBehaviour
     }
 
     void SpawnNewItem(ShopItem item, ShopItemSlot slot)
-{
+    {
+    
     
     GameObject newItem = Instantiate(InventoryItemPrefab, slot.transform);
     
     ItemInShop inventoryItem = newItem.GetComponent<ItemInShop>();
     
     inventoryItem.InitialiseItem(item);
+
     
     
     
-}
+    }
 
     public void BoughtItem(int index){
         ShopItemSlot slot = inventorySlots[index];
@@ -225,6 +257,7 @@ public class ShopManager : MonoBehaviour
                     Debug.Log("Refresh Successful");
                     MinusLeaf(50);
                     StartCoroutine(RefreshShopCoroutine());
+                    
 
                 }else{
                     
@@ -240,7 +273,7 @@ public class ShopManager : MonoBehaviour
 
       private IEnumerator RefreshShopCoroutine()
     {
-       
+       Debug.Log("Refresh Shop Coroutine");
         ClearAllSlots();
 
         yield return new WaitForSeconds(0.1f);
@@ -259,6 +292,9 @@ public class ShopManager : MonoBehaviour
 
 
         SaveShopSlots();
+        LoadShopTexts();
+
+        
 
         
     }
