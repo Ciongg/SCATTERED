@@ -8,11 +8,14 @@ public class PlantTap : MonoBehaviour
 {
 
     public int tapRequired;
-    public GameObject[] plantStages; // Array to hold plant stages
+    private float collectibleSpawnChance = 0.2f;
+    public int collectibleSpawnAmount;
+    public int collectibleSpawnLimit;
+    
 
-    public float currentTaps = 0;
-    private int currentStage = 0;
 
+
+    public GameObject collectiblePrefab;
     private BoxCollider2D plantCollider;
     private PolygonCollider2D plantGrabCollider;
     private GardenGameManager gameManager;
@@ -21,8 +24,14 @@ public class PlantTap : MonoBehaviour
     private Basket basket;
     private ParticleSystem tapParticleEffect;
     GameObject donateButtonObject;
+    public GameObject[] plantStages; // Array to hold plant stages
 
+    [HideInInspector]
+    public int currentStage = 0;
+    [HideInInspector]
     public string seedName;
+    [HideInInspector]
+    public float currentTaps = 0;
     
 
     public int GetCurrentGrowthStage()
@@ -139,7 +148,13 @@ public class PlantTap : MonoBehaviour
             
             currentTaps += gameManager.tapPower;;
             gameManager.UpdateCount();
-             PlayTapParticleEffect(tapPosition);
+            PlayTapParticleEffect(tapPosition);
+
+            if (Random.value < collectibleSpawnChance && collectibleSpawnAmount < collectibleSpawnLimit) // Random.value gives a value between 0.0 and 1.0
+            {
+                collectibleSpawnAmount++;
+                SpawnCollectible(tapPosition);
+            }
         }
 
         //second check
@@ -162,6 +177,72 @@ public class PlantTap : MonoBehaviour
 
         Destroy(particleInstance.gameObject, 1.5f);
     }
+
+    private void SpawnCollectible(Vector2 position)
+{
+    // Define a range for the random offset
+    float spawnOffsetRange = Random.Range(1f, 1.5f); // Adjust the range as needed
+
+    // Generate a random offset
+    Vector2 randomOffset = new Vector2(
+        Random.Range(-spawnOffsetRange, spawnOffsetRange),
+        Random.Range(-spawnOffsetRange, spawnOffsetRange)
+    );
+
+    // Calculate the spawn position by adding the offset to the original position
+    Vector2 spawnPosition = position + randomOffset;
+
+    // Instantiate the collectible prefab at the calculated spawn position
+    GameObject collectible = Instantiate(collectiblePrefab, spawnPosition, Quaternion.identity);
+
+    // Get the Rigidbody2D component of the collectible
+    Rigidbody2D collectibleRb = collectible.GetComponent<Rigidbody2D>();
+    if (collectibleRb != null)
+    {
+        // Set either left or right as the direction (X axis only)
+        float randomDirectionX = Random.value < 0.5f ? -1f : 1f; // Randomly pick left (-1) or right (1)
+        Vector2 horizontalDirection = new Vector2(randomDirectionX, 0f); // No vertical movement (Y = 0)
+
+        // Apply force to the collectible
+        float forceMagnitude = Random.Range(3f, 6f); // Adjust force magnitude as needed
+        collectibleRb.AddForce(horizontalDirection * forceMagnitude, ForceMode2D.Impulse);
+    }
+}
+
+   public IEnumerator SpawnBulkPlantCollectible(int amount, Vector2 spawnPosition)
+{
+    for (int i = 0; i < amount; i++)
+    {
+        GameObject collectible = Instantiate(collectiblePrefab, spawnPosition, Quaternion.identity);
+
+        // Get the Rigidbody2D component of the collectible
+        Rigidbody2D collectibleRb = collectible.GetComponent<Rigidbody2D>();
+        if (collectibleRb != null)
+        {
+            // Set a random direction for X (left or right)
+            float randomDirectionX = Random.value < 0.5f ? -1f : 1f; // Randomly pick left (-1) or right (1)
+
+            // Set a random upward speed for Y
+            float randomDirectionY = Random.Range(1f, 3f); // Random speed for upward movement
+
+            // Create the force vector with both X and Y directions
+            Vector2 force = new Vector2(randomDirectionX, randomDirectionY).normalized; // Normalize to keep direction consistent
+
+            // Apply force to the collectible
+            float forceMagnitude = Random.Range(3f, 6f); // Adjust force magnitude as needed
+            collectibleRb.AddForce(force * forceMagnitude, ForceMode2D.Impulse);
+        }
+
+        // Wait for a random interval between 0.1f and 0.2f seconds before spawning the next collectible
+        yield return new WaitForSeconds(Random.Range(0.1f, 0.2f));
+    }
+}
+
+
+
+    
+
+
 
 
     private void OnDonateButtonClicked(){

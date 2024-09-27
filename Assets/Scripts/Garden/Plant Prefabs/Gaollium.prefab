@@ -53,12 +53,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tapRequired: 100
+  collectibleSpawnAmount: 0
+  collectibleSpawnLimit: 10
+  collectiblePrefab: {fileID: 8224827117690575394, guid: 7bdae5adab1988842805e7bbc7b1f5fb, type: 3}
   plantStages:
   - {fileID: 4736877036663462475}
   - {fileID: 4736877035938082717}
   - {fileID: 4736877036287881964}
-  currentTaps: 0
+  currentStage: 0
   seedName: 
+  currentTaps: 0
 --- !u!61 &2765645449482011698
 BoxCollider2D:
   m_ObjectHideFlags: 0

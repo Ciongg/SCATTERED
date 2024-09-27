@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4912499419038247704}
   - component: {fileID: 4912499419038247703}
   m_Layer: 0
-  m_Name: Sunflower_Final
+  m_Name: Gerbaras_Final
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: baf340b512f38a34ab6d4b928f41b2d6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 117732fef294108448051aa78dbc552c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 4912499419397092967}
   - component: {fileID: 4912499419397092966}
   m_Layer: 0
-  m_Name: Sunflower
+  m_Name: Gerbaras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -241,7 +241,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 15ff3ff57216ce04082c321f1f88c31c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 854c3eb11d442cf4ea2c079e17838c52, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: -8528449201105763467}
   - component: {fileID: 3326095134815198472}
   m_Layer: 0
-  m_Name: Sunflower
+  m_Name: Gerbaras
   m_TagString: sunflower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

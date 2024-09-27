@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GardenGameManager : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class GardenGameManager : MonoBehaviour
     private GameObject pot;
     private Transform spawn;
     private Transform plantPrefab;
+    public TextMeshProUGUI ecoCoinText;
+    public int ecoCoinCount = 0;
 
     public bool isInitialized;
     public bool isAlreadyPlanted;
@@ -43,9 +46,19 @@ public class GardenGameManager : MonoBehaviour
         SavePlantData();
     }
 
+    public void updateEcoCoinText(){
+        PlayerPrefs.SetInt("EcoCoinCount", ecoCoinCount);
+        ecoCoinText.text = ecoCoinCount.ToString();
+    }
+
 
     void Start()
     {
+
+        ecoCoinCount = PlayerPrefs.GetInt("EcoCoinCount", ecoCoinCount);
+        ecoCoinText.text = ecoCoinCount.ToString();
+        updateEcoCoinText();
+
         tapPower = 1;
 
         tapPower = PlayerPrefs.GetFloat("TapPower", tapPower);

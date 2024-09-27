@@ -11,9 +11,12 @@ public class Basket : MonoBehaviour
     private RectTransform rectTransform;
     public BoxCollider2D boxcollider;
     public GardenGameManager gameManager;
-
+    public PlantTap plantTap;
+    private GameObject pot;
+    private Transform spawn;
     void Start()
     {
+        
         rectTransform = GetComponent<RectTransform>();
 
         // Start the basket off-screen
@@ -22,11 +25,18 @@ public class Basket : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider){
         gameManager.isInitialized = false;
+
+         FindPlantTap();
+
         switch(collider.tag){
             case "gaollium":
                 Debug.Log("I got an" + collider.tag);
                 Destroy(collider.gameObject);
-
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(10, endOnScreenPosition));
+                    
+                }
                 SlideOut();
                 ClearPlantDataFile();
             break;
@@ -34,7 +44,10 @@ public class Basket : MonoBehaviour
             case "sunflower":
                 Debug.Log("I got an" + collider.tag);
                 Destroy(collider.gameObject);
-
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(10, endOnScreenPosition));
+                }
                 SlideOut();
                 ClearPlantDataFile();
             break;
@@ -42,7 +55,14 @@ public class Basket : MonoBehaviour
         }
     }
 
-
+     private void FindPlantTap()
+    {
+        // Attempt to find PlantTap in the hierarchy when needed
+        pot = GameObject.Find("Pot");
+        spawn = pot.transform.Find("Spawn");
+        
+        plantTap = spawn.GetComponentInChildren<PlantTap>();
+    }
 
     private void ClearPlantDataFile()
 {

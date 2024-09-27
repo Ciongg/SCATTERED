@@ -23,7 +23,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         plantPot = GameObject.Find("Pot").GetComponent<PlantPot>();
         gameManager = GameObject.Find("GardenGameManager").GetComponent<GardenGameManager>();
-        demoScript = GameObject.Find("TestGroup").GetComponent<DemoScript>();
+        demoScript = GameObject.Find("InventoryManager").GetComponent<DemoScript>();
         
     }
 
