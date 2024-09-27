@@ -3,15 +3,96 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+[System.Serializable]
+public class SeedData
+{
+    public int sunflower;
+    public int gaollium;
+    public int gerbaras;
+    public int rareSeed;
+    public int legendarySeed;
+
+    // Constructor to initialize seed counts
+    public SeedData(int sunflower, int gaollium, int gerbaras, int rare, int legendary)
+    {
+        this.sunflower = sunflower;
+        this.gaollium = gaollium;
+        this.gerbaras = gerbaras;
+        this.rareSeed = rare;
+        this.legendarySeed = legendary;
+    }
+}
+
+
 
 public class ShopManager : MonoBehaviour
 {   
+
+
+    public void SaveSeedData()
+{
+    // Load existing data first
+    string existingJson = PlayerPrefs.GetString("SeedData", "");
+
+    SeedData existingData;
+    if (!string.IsNullOrEmpty(existingJson))
+    {
+        // If data exists, load it
+        existingData = JsonUtility.FromJson<SeedData>(existingJson);
+    }
+    else
+    {
+        // If no existing data, create a new SeedData object
+        existingData = new SeedData(0, 0, 0, 0, 0);
+    }
+
+    // Update the existing data with the new counts
+    existingData.sunflower += currentSunflower;
+    existingData.gaollium += currentGaollium;
+    existingData.gerbaras += currentGerbaras;
+    existingData.rareSeed += currentRareSeed;
+    existingData.legendarySeed += currentLegendarySeed;
+
+    // Save the updated data back to PlayerPrefs
+    string updatedJson = JsonUtility.ToJson(existingData);
+    PlayerPrefs.SetString("SeedData", updatedJson);
+    PlayerPrefs.Save();
+}
+
+
+    public void LoadSeedData()
+    {
+        string json = PlayerPrefs.GetString("SeedData", "");
+        if (!string.IsNullOrEmpty(json))
+        {
+            SeedData seedData = JsonUtility.FromJson<SeedData>(json);
+            currentSunflower = seedData.sunflower;
+            currentGaollium = seedData.gaollium;
+            currentGerbaras = seedData.gerbaras;
+            currentRareSeed = seedData.rareSeed;
+            currentLegendarySeed = seedData.legendarySeed;
+        }
+        else
+        {
+            
+            currentSunflower = 0;
+            currentGaollium = 0;
+            currentGerbaras = 0;
+            currentRareSeed = 0;
+            currentLegendarySeed = 0;
+        }
+    }
+
+
+
     public ShopItemSlot [] inventorySlots;
     public GameObject InventoryItemPrefab;
     public TextMeshProUGUI leafCountText;
     public int currentLeaf;
-    public int currentBasicSeed;
-    public int currentUncommonSeed;
+
+    public int currentSunflower;
+    public int currentGaollium;
+    public int currentGerbaras;
     public int currentRareSeed;
     public int currentLegendarySeed;
 
@@ -38,11 +119,7 @@ public class ShopManager : MonoBehaviour
             LoadShopTexts();
         }
 
-        //Get the number of seeds based on their rarity as int
-        currentBasicSeed = PlayerPrefs.GetInt("BasicSeedCount", 0);
-        currentUncommonSeed = PlayerPrefs.GetInt("UncommonSeedCount", 0);
-        currentRareSeed = PlayerPrefs.GetInt("RareSeedCount", 0);
-        currentLegendarySeed = PlayerPrefs.GetInt("LegendarySeedCount", 0);
+        
         
     }
 
@@ -124,30 +201,31 @@ public class ShopManager : MonoBehaviour
 
     
 
-    public void AddSeed(int amount, Rarity rarity){
+    public void AddSeed(int amount, ShopItemName name){
 
-        switch(rarity){
-            case Rarity.Basic:
-                currentBasicSeed += amount;
-                PlayerPrefs.SetInt("BasicSeedCount", currentBasicSeed);
-                PlayerPrefs.Save();
+        switch(name){
+            case ShopItemName.Sunflower:
+                currentSunflower += amount;
+                
             break;
 
-            case Rarity.Uncommon:
-                currentUncommonSeed += amount;
-                PlayerPrefs.SetInt("UncommonSeedCount", currentUncommonSeed);
-                PlayerPrefs.Save();
+            case ShopItemName.Gaollium:
+                currentGaollium += amount;
+                
             break;
-            case Rarity.Rare:
+            case ShopItemName.Gerbaras:
+                currentGerbaras += amount;
+                
+            break;
+
+            case ShopItemName.RareSeedBag:
                 currentRareSeed += amount;
-                PlayerPrefs.SetInt("RareSeedCount", currentRareSeed);
-                PlayerPrefs.Save();
+               
             break;
 
-            case Rarity.Legendary:
+            case ShopItemName.LegendarySeedBag:
                 currentLegendarySeed += amount;
-                PlayerPrefs.SetInt("LegendarySeedCount", currentLegendarySeed);
-                PlayerPrefs.Save();
+                
             break;
 
             default:
@@ -156,6 +234,8 @@ public class ShopManager : MonoBehaviour
 
 
         }
+
+         SaveSeedData();
 
         
     }
@@ -204,9 +284,12 @@ public class ShopManager : MonoBehaviour
 
             switch(item.type){
                 case ShopItemType.Seed:
-                Debug.Log("Purchased Seed");
-                AddSeed(1, item.rarity);
-                Debug.Log(currentBasicSeed + " " + currentUncommonSeed + " " + currentRareSeed + " " + currentLegendarySeed);
+                
+
+
+                
+                AddSeed(1, item.itemName);
+               
                 
                 break;
 
@@ -224,6 +307,8 @@ public class ShopManager : MonoBehaviour
                 break;
 
             }
+
+                SaveSeedData();
                 ClearSpecificSlot(index);
 
                 

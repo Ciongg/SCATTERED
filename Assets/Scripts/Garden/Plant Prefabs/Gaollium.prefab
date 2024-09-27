@@ -54,7 +54,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tapRequired: 100
   collectibleSpawnAmount: 0
-  collectibleSpawnLimit: 10
+  collectibleSpawnLimit: 20
+  donateCollectibleSpawnAmount: 5
   collectiblePrefab: {fileID: 8224827117690575394, guid: 7bdae5adab1988842805e7bbc7b1f5fb, type: 3}
   plantStages:
   - {fileID: 4736877036663462475}

@@ -595,15 +595,17 @@ MonoBehaviour:
   InventoryItemPrefab: {fileID: 8897010003098721406, guid: 1b08aeaed5927744f8dee5de5b86f15a, type: 3}
   leafCountText: {fileID: 1294748389}
   currentLeaf: 0
-  currentBasicSeed: 0
-  currentUncommonSeed: 0
+  currentSunflower: 0
+  currentGaollium: 0
+  currentGerbaras: 0
   currentRareSeed: 0
   currentLegendarySeed: 0
   itemsToAdd:
-  - {fileID: 11400000, guid: 923556bec1f80de43bb44f791215c87f, type: 2}
-  - {fileID: 11400000, guid: f95a53ae566c38440baf6385312d1346, type: 2}
-  - {fileID: 11400000, guid: 4eb03645e76f9b7428ebfbd2be114ba1, type: 2}
-  - {fileID: 11400000, guid: ef932db846ddcc74b9e29fe58d9c00c0, type: 2}
+  - {fileID: 11400000, guid: 440b579f32ff48c4f8e0cecb085b65c7, type: 2}
+  - {fileID: 11400000, guid: 0ba3024ceffaa2a4bb3ea2f47239c280, type: 2}
+  - {fileID: 11400000, guid: c3ce7e2cb5d23c943aeebfa1f48c3a40, type: 2}
+  - {fileID: 11400000, guid: e7508aadb9199704590bcd63a7d311f0, type: 2}
+  - {fileID: 11400000, guid: 27f36a63443ddc34dbc30f3294d18272, type: 2}
 --- !u!4 &156745178
 Transform:
   m_ObjectHideFlags: 0

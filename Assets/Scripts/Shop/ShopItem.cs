@@ -11,6 +11,9 @@ public class ShopItem : ScriptableObject
   public ShopItemType type;
   public int cost;
   public Rarity rarity;
+  public ShopItemName itemName;
+  
+
   
 }
 
@@ -19,6 +22,14 @@ public enum ShopItemType{
   Character,
   Background,
 
+}
+
+public enum ShopItemName{
+  Sunflower,
+  Gaollium,
+  Gerbaras,
+  RareSeedBag,
+  LegendarySeedBag,
 }
 
 public enum Rarity{

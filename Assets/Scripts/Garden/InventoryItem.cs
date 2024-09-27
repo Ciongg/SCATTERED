@@ -19,6 +19,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private PlantPot plantPot;
     GardenGameManager gameManager;
     DemoScript demoScript;
+
+   
+    
     public void Start()
     {
         plantPot = GameObject.Find("Pot").GetComponent<PlantPot>();
@@ -87,30 +90,31 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             case ItemType.Seed:
 
-                switch(item.rarity)
+                switch(item.itemName)
                 {
-                    case RarityType.Basic:
-                        demoScript.currentBasicSeed -= 1;
-                        PlayerPrefs.SetInt("BasicSeedCount", demoScript.currentBasicSeed);
-                        PlayerPrefs.Save();
+                    case PlantItemName.Sunflower:
+                        demoScript.currentSunflower -= 1;
+                        demoScript.SaveSeedData();
                     break;
 
-                    case RarityType.Uncommon:
-                        demoScript.currentUncommonSeed -= 1;
-                        PlayerPrefs.SetInt("UncommonSeedCount", demoScript.currentUncommonSeed);
-                        PlayerPrefs.Save();
+                    case PlantItemName.Gaollium:
+                        demoScript.currentGaollium -= 1;
+                        demoScript.SaveSeedData();
                     break;
 
-                    case RarityType.Rare:
+                    case PlantItemName.Gerbaras:
+                        demoScript.currentGerbaras -= 1;
+                        demoScript.SaveSeedData();
+                    break;
+
+                    case PlantItemName.RareSeedBag:
                         demoScript.currentRareSeed -= 1;
-                        PlayerPrefs.SetInt("RareSeedCount", demoScript.currentRareSeed);
-                        PlayerPrefs.Save();
+                        demoScript.SaveSeedData();
                     break;
 
-                    case RarityType.Legendary:
+                    case PlantItemName.LegendarySeedBag:
                        demoScript. currentLegendarySeed -= 1;
-                        PlayerPrefs.SetInt("LegendarySeedCount", demoScript.currentLegendarySeed);
-                        PlayerPrefs.Save();
+                       demoScript.SaveSeedData();
                     break;
 
                     default:
@@ -118,7 +122,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     break;
                 }
 
-                 plantPot.PlantSeed(item.type, item.rarity);
+                 plantPot.PlantSeed(item.type, item.itemName);
                 
                 break;
 

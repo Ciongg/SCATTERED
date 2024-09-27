@@ -54,7 +54,7 @@ public class GardenGameManager : MonoBehaviour
 
     void Start()
     {
-
+        Application.targetFrameRate = 60;
         ecoCoinCount = PlayerPrefs.GetInt("EcoCoinCount", ecoCoinCount);
         ecoCoinText.text = ecoCoinCount.ToString();
         updateEcoCoinText();

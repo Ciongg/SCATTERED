@@ -3,45 +3,60 @@ using UnityEngine;
 
 public class PlantPot : MonoBehaviour
 {
-     public GameObject[] BasicSeedPrefabs;    
-    public GameObject[] UncommonSeedPrefabs; 
+    public GameObject sunflowerPrefab;
+    public GameObject gaolliumPrefab;
+    public GameObject gerbarasPrefab;
     public GameObject[] RareSeedPrefabs;      
     public GameObject[] LegendarySeedPrefabs; 
     public Transform spawnPoint;
     
-    public void PlantSeed(ItemType itemType, RarityType rarityType)
+    public void PlantSeed(ItemType itemType, PlantItemName itemName)
     {
         if (itemType == ItemType.Seed)
         {
-              GameObject[] selectedSeedPrefabs;
+             GameObject selectedPrefab = null;  // Variable to hold the selected prefab
+            GameObject[] selectedSeedPrefabs = null; // Array for random selection (if applicable)
 
-            switch(rarityType){
-                case RarityType.Basic:
-                    selectedSeedPrefabs = BasicSeedPrefabs;
+
+            switch(itemName){
+                case PlantItemName.Sunflower:
+                    selectedPrefab = sunflowerPrefab;
                     break;
 
-                case RarityType.Uncommon:
-                     selectedSeedPrefabs = UncommonSeedPrefabs;
+                case PlantItemName.Gaollium:
+                     selectedPrefab = gaolliumPrefab;
                     break;
 
-                case RarityType.Rare:
-                    selectedSeedPrefabs = RareSeedPrefabs;
+                case PlantItemName.Gerbaras:
+                    selectedPrefab = gerbarasPrefab;
                     break;
 
-                case RarityType.Legendary:
+                case PlantItemName.RareSeedBag:
+                     selectedSeedPrefabs = RareSeedPrefabs;
+                    break;
+
+                case PlantItemName.LegendarySeedBag:
                      selectedSeedPrefabs = LegendarySeedPrefabs;
                     break;
 
                 default:
-                    selectedSeedPrefabs = BasicSeedPrefabs;
+                    
                     Debug.LogWarning("Unknown rarity type.");
                     break;
             }
             
-            // Randomly select a seed prefab to instantiate
-            int seedIndex = Random.Range(0, selectedSeedPrefabs.Length);
-            GameObject plant = Instantiate(selectedSeedPrefabs[seedIndex], spawnPoint.position, Quaternion.identity);
-            plant.transform.SetParent(spawnPoint.transform);
+            if (selectedPrefab != null)
+            {
+                GameObject plant = Instantiate(selectedPrefab, spawnPoint.position, Quaternion.identity);
+                plant.transform.SetParent(spawnPoint.transform);
+            }
+            // If it's a seed bag based on rarity, select a random prefab
+            else if (selectedSeedPrefabs != null && selectedSeedPrefabs.Length > 0)
+            {
+                int seedIndex = Random.Range(0, selectedSeedPrefabs.Length);
+                GameObject plant = Instantiate(selectedSeedPrefabs[seedIndex], spawnPoint.position, Quaternion.identity);
+                plant.transform.SetParent(spawnPoint.transform);
+            }
         }
     }
 }

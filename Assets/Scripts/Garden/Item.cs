@@ -11,7 +11,7 @@ public class Item : ScriptableObject
    public ActionType actionType;
    public bool stackable = true;
    public RarityType rarity;
-
+   public PlantItemName itemName;
 }
 
 //creates drop downs
@@ -19,6 +19,15 @@ public enum ItemType{
     Seed,
     Tool
 }
+
+public enum PlantItemName{
+  Sunflower,
+  Gaollium,
+  Gerbaras,
+  RareSeedBag,
+  LegendarySeedBag,
+}
+
 
 public enum ActionType{
     Plant,

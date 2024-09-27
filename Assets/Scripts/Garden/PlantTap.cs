@@ -8,10 +8,10 @@ public class PlantTap : MonoBehaviour
 {
 
     public int tapRequired;
-    private float collectibleSpawnChance = 0.2f;
+    private float collectibleSpawnChance = 0.4f;
     public int collectibleSpawnAmount;
     public int collectibleSpawnLimit;
-    
+    public int donateCollectibleSpawnAmount;
 
 
 
@@ -135,12 +135,16 @@ public class PlantTap : MonoBehaviour
         }
     }
 
+    private bool remainingCollectiblesSpawned = false;
+
     private void IncrementTap(Vector2 tapPosition)
     {
         
         //initial check
-        if (currentTaps >= (int)tapRequired)
+        if (currentTaps >= tapRequired)
         {
+            
+
             
             donateButton.interactable = true;
             
@@ -155,6 +159,8 @@ public class PlantTap : MonoBehaviour
                 collectibleSpawnAmount++;
                 SpawnCollectible(tapPosition);
             }
+
+            
         }
 
         //second check
@@ -163,7 +169,25 @@ public class PlantTap : MonoBehaviour
             Debug.Log("Tap requirement met!");
 
             // Enable the donate button since requirement is met
+
+            if(!remainingCollectiblesSpawned){
+
+            int remainingCollectibles = collectibleSpawnLimit - collectibleSpawnAmount;
+                for (int i = 0; i < remainingCollectibles; i++)
+                {
+                    SpawnCollectible(tapPosition);
+                }
+                remainingCollectiblesSpawned = true; // Set to true after spawning
+            }
+            
             donateButton.interactable = true;
+            
+
+               
+                
+                
+            
+           
         }
 
         gameManager.SavePlantData();
@@ -234,7 +258,7 @@ public class PlantTap : MonoBehaviour
         }
 
         // Wait for a random interval between 0.1f and 0.2f seconds before spawning the next collectible
-        yield return new WaitForSeconds(Random.Range(0.1f, 0.2f));
+        yield return new WaitForSeconds(Random.Range(0.1f, 0.05f));
     }
 }
 

@@ -34,11 +34,10 @@ public class Basket : MonoBehaviour
                 Destroy(collider.gameObject);
                  if (plantTap != null)
                 {
-                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(10, endOnScreenPosition));
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
                     
                 }
-                SlideOut();
-                ClearPlantDataFile();
+                
             break;
 
             case "sunflower":
@@ -46,13 +45,28 @@ public class Basket : MonoBehaviour
                 Destroy(collider.gameObject);
                  if (plantTap != null)
                 {
-                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(10, endOnScreenPosition));
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
                 }
-                SlideOut();
-                ClearPlantDataFile();
             break;
 
+            case "gerbaras":
+                Debug.Log("I got an" + collider.tag);
+                Destroy(collider.gameObject);
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
+                }
+            break;
+
+            case "ecocoin":
+            Debug.Log("I got an" + collider.tag);
+            return;
+            
+          
+
         }
+                SlideOut();
+                ClearPlantDataFile();
     }
 
      private void FindPlantTap()
