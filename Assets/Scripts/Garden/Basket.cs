@@ -60,6 +60,38 @@ public class Basket : MonoBehaviour
                     StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
                 }
             break;
+            case "habacus":
+                Debug.Log("I got an" + collider.tag);
+                Destroy(collider.gameObject);
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
+                }
+            break;
+            case "palm":
+                Debug.Log("I got an" + collider.tag);
+                Destroy(collider.gameObject);
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
+                }
+            break;
+            case "polendron":
+                Debug.Log("I got an" + collider.tag);
+                Destroy(collider.gameObject);
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
+                }
+            break;
+            case "snakeplant":
+                Debug.Log("I got an" + collider.tag);
+                Destroy(collider.gameObject);
+                 if (plantTap != null)
+                {
+                    StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
+                }
+            break;
 
             case "ecocoin":
             Debug.Log("I got an" + collider.tag);

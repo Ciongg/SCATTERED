@@ -16,5 +16,5 @@ MonoBehaviour:
   type: 0
   actionType: 0
   stackable: 1
-  rarity: 0
+  rarity: 1
   itemName: 1

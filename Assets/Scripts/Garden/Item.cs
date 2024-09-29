@@ -26,6 +26,11 @@ public enum PlantItemName{
   Gerbaras,
   RareSeedBag,
   LegendarySeedBag,
+  Habacus,
+  Palm,
+  Polendron,
+  Snakeplant
+
 }
 
 

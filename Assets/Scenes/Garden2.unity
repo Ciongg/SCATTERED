@@ -1075,11 +1075,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cab105e48a9ab7f46b7d3b52193e9db9, type: 2}
   - {fileID: 11400000, guid: e8ca4b39614b4c6448403a107ba58048, type: 2}
   - {fileID: 11400000, guid: b8dc812d46a7eaf4ea07238ee16616e9, type: 2}
+  - {fileID: 11400000, guid: 06979a61bda1dd54f951f8c93d059529, type: 2}
+  - {fileID: 11400000, guid: fc5c25696718cb847bf468293833077c, type: 2}
+  - {fileID: 11400000, guid: 62e8edcef00e6ec47a280d09d9fcc7f2, type: 2}
+  - {fileID: 11400000, guid: 816f42a04cd77244db647144d313f414, type: 2}
   currentSunflower: 0
   currentGaollium: 0
   currentGerbaras: 0
   currentRareSeed: 0
   currentLegendarySeed: 0
+  currentHabacus: 0
+  currentPalm: 0
+  currentPolendron: 0
+  currentSnakeplant: 0
 --- !u!1001 &165086818
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3693,6 +3701,10 @@ MonoBehaviour:
   sunflowerPrefab: {fileID: 4912499420180002004, guid: 2e94180c088fc624a80de4d23f880f25, type: 3}
   gaolliumPrefab: {fileID: 4736877035548749089, guid: 310e191f2e8903c4687a57fbfa90235e, type: 3}
   gerbarasPrefab: {fileID: 4912499420180002004, guid: 73e88693c75ba2448b349cf13e5237c3, type: 3}
+  habacusPrefab: {fileID: 4912499420180002004, guid: 9dc4afc5c7195564f86bfa06a95e1691, type: 3}
+  palmPrefab: {fileID: 4912499420180002004, guid: dffd5c187cf96c9458a5b24e1d35792a, type: 3}
+  polendronPrefab: {fileID: 4912499420180002004, guid: ed974b4bb622ef641abfb69e74ef49fd, type: 3}
+  snakeplantPrefab: {fileID: 4912499420180002004, guid: e8a0ec3f7d5ed7346aa857909e57bd53, type: 3}
   RareSeedPrefabs:
   - {fileID: 4912499420180002004, guid: 2e94180c088fc624a80de4d23f880f25, type: 3}
   LegendarySeedPrefabs:
@@ -6614,6 +6626,10 @@ MonoBehaviour:
   - {fileID: 4736877035548749089, guid: 310e191f2e8903c4687a57fbfa90235e, type: 3}
   - {fileID: 4912499420180002004, guid: 2e94180c088fc624a80de4d23f880f25, type: 3}
   - {fileID: 4912499420180002004, guid: 73e88693c75ba2448b349cf13e5237c3, type: 3}
+  - {fileID: 4912499420180002004, guid: 9dc4afc5c7195564f86bfa06a95e1691, type: 3}
+  - {fileID: 4912499420180002004, guid: dffd5c187cf96c9458a5b24e1d35792a, type: 3}
+  - {fileID: 4912499420180002004, guid: ed974b4bb622ef641abfb69e74ef49fd, type: 3}
+  - {fileID: 4912499420180002004, guid: e8a0ec3f7d5ed7346aa857909e57bd53, type: 3}
 --- !u!114 &2016535503 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3566807994697760085, guid: 1686fa7707a15304d8714f5171dce8b5, type: 3}

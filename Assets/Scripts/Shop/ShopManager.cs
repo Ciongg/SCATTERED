@@ -11,15 +11,23 @@ public class SeedData
     public int gerbaras;
     public int rareSeed;
     public int legendarySeed;
+    public int habacus;
+    public int palm;
+    public int polendron;
+    public int snakeplant;
 
     // Constructor to initialize seed counts
-    public SeedData(int sunflower, int gaollium, int gerbaras, int rare, int legendary)
+    public SeedData(int sunflower, int gaollium, int gerbaras, int rare, int legendary, int habacus, int palm, int polendron, int snakeplant)
     {
         this.sunflower = sunflower;
         this.gaollium = gaollium;
         this.gerbaras = gerbaras;
         this.rareSeed = rare;
         this.legendarySeed = legendary;
+        this.habacus = habacus;
+        this.palm = palm;
+        this.polendron = polendron;
+        this.snakeplant = snakeplant;
     }
 }
 
@@ -43,7 +51,7 @@ public class ShopManager : MonoBehaviour
     else
     {
         // If no existing data, create a new SeedData object
-        existingData = new SeedData(0, 0, 0, 0, 0);
+        existingData = new SeedData(0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     // Update the existing data with the new counts
@@ -52,6 +60,10 @@ public class ShopManager : MonoBehaviour
     existingData.gerbaras += currentGerbaras;
     existingData.rareSeed += currentRareSeed;
     existingData.legendarySeed += currentLegendarySeed;
+    existingData.habacus += currentHabacus;
+    existingData.palm += currentPalm;
+    existingData.polendron += currentPolendron;
+    existingData.snakeplant += currentSnakeplant;
 
     // Save the updated data back to PlayerPrefs
     string updatedJson = JsonUtility.ToJson(existingData);
@@ -63,6 +75,10 @@ public class ShopManager : MonoBehaviour
     currentGerbaras = 0;
     currentRareSeed = 0;
     currentLegendarySeed = 0;
+    currentHabacus = 0;
+    currentPalm = 0;
+    currentPolendron = 0;
+    currentSnakeplant = 0;
 }
 
 
@@ -77,6 +93,10 @@ public class ShopManager : MonoBehaviour
             currentGerbaras = seedData.gerbaras;
             currentRareSeed = seedData.rareSeed;
             currentLegendarySeed = seedData.legendarySeed;
+            currentHabacus = seedData.habacus;
+            currentPalm = seedData.palm;
+            currentPolendron = seedData.polendron;
+            currentSnakeplant = seedData.snakeplant;
         }
         else
         {
@@ -86,6 +106,10 @@ public class ShopManager : MonoBehaviour
             currentGerbaras = 0;
             currentRareSeed = 0;
             currentLegendarySeed = 0;
+            currentHabacus = 0;
+            currentPalm = 0;
+            currentPolendron = 0;
+            currentSnakeplant = 0;
         }
     }
 
@@ -101,6 +125,10 @@ public class ShopManager : MonoBehaviour
     public int currentGerbaras;
     public int currentRareSeed;
     public int currentLegendarySeed;
+    public int currentHabacus;
+    public int currentPalm;
+    public int currentPolendron;
+    public int currentSnakeplant;
 
     public ShopItem[] itemsToAdd;
 
@@ -224,6 +252,22 @@ public class ShopManager : MonoBehaviour
                 currentGerbaras += amount;
                 
             break;
+            case ShopItemName.Habacus:
+                currentHabacus += amount;
+                
+            break;
+            case ShopItemName.Palm:
+                currentPalm += amount;
+                
+            break;
+            case ShopItemName.Polendron:
+                currentPolendron += amount;
+                
+            break;
+            case ShopItemName.Snakeplant:
+                currentSnakeplant += amount;
+                
+            break;
 
             case ShopItemName.RareSeedBag:
                 currentRareSeed += amount;
@@ -317,7 +361,7 @@ public class ShopManager : MonoBehaviour
 
                 SaveSeedData();
                 ClearSpecificSlot(index);
-                Debug.Log("Sunflower: " + currentSunflower + "Gaollium: " + currentGaollium + "Gernaras: " + currentGerbaras + "Rare Seed Bag: " + currentRareSeed + "Legendary Seed Bag: " + currentLegendarySeed);
+                // Debug.Log("Sunflower: " + currentSunflower + "Gaollium: " + currentGaollium + "Gernaras: " + currentGerbaras + "Rare Seed Bag: " + currentRareSeed + "Legendary Seed Bag: " + currentLegendarySeed);
 
                 
         

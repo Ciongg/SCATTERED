@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd70609281afad746ae03ae08d46bac8, type: 3}
-  m_Name: Gerbaras
+  m_Name: Palm
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 854c3eb11d442cf4ea2c079e17838c52, type: 3}
+  image: {fileID: 21300000, guid: 365b36448bd1db4439c18760d472946a, type: 3}
   type: 0
-  cost: 30
-  rarity: 1
-  itemName: 2
+  cost: 10
+  rarity: 0
+  itemName: 6

@@ -16,6 +16,10 @@ TagManager:
   - sunflower
   - gerbaras
   - ecocoin
+  - snakeplant
+  - palm
+  - polendron
+  - habacus
   layers:
   - Default
   - TransparentFX

@@ -30,6 +30,10 @@ public enum ShopItemName{
   Gerbaras,
   RareSeedBag,
   LegendarySeedBag,
+  Habacus,
+  Palm,
+  Polendron,
+  Snakeplant
 }
 
 public enum Rarity{

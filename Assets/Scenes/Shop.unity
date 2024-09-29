@@ -604,12 +604,20 @@ MonoBehaviour:
   currentGerbaras: 0
   currentRareSeed: 0
   currentLegendarySeed: 0
+  currentHabacus: 0
+  currentPalm: 0
+  currentPolendron: 0
+  currentSnakeplant: 0
   itemsToAdd:
   - {fileID: 11400000, guid: 440b579f32ff48c4f8e0cecb085b65c7, type: 2}
   - {fileID: 11400000, guid: 0ba3024ceffaa2a4bb3ea2f47239c280, type: 2}
   - {fileID: 11400000, guid: c3ce7e2cb5d23c943aeebfa1f48c3a40, type: 2}
   - {fileID: 11400000, guid: e7508aadb9199704590bcd63a7d311f0, type: 2}
   - {fileID: 11400000, guid: 27f36a63443ddc34dbc30f3294d18272, type: 2}
+  - {fileID: 11400000, guid: 5cf0bea6adc2f254e9979a5560024553, type: 2}
+  - {fileID: 11400000, guid: 8de0344f66321294e99e4215bdd8f28b, type: 2}
+  - {fileID: 11400000, guid: 258d69dbaf2ea6b44a9d3dd6a5ab3c8b, type: 2}
+  - {fileID: 11400000, guid: bbf970f169cb3fc46a6399e33225bc01, type: 2}
 --- !u!4 &156745178
 Transform:
   m_ObjectHideFlags: 0

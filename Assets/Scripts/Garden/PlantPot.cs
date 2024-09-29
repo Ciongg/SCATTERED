@@ -6,6 +6,10 @@ public class PlantPot : MonoBehaviour
     public GameObject sunflowerPrefab;
     public GameObject gaolliumPrefab;
     public GameObject gerbarasPrefab;
+    public GameObject habacusPrefab;
+    public GameObject palmPrefab;
+    public GameObject polendronPrefab;
+    public GameObject snakeplantPrefab;
     public GameObject[] RareSeedPrefabs;      
     public GameObject[] LegendarySeedPrefabs; 
     public Transform spawnPoint;
@@ -37,6 +41,18 @@ public class PlantPot : MonoBehaviour
 
                 case PlantItemName.LegendarySeedBag:
                      selectedSeedPrefabs = LegendarySeedPrefabs;
+                    break;
+                case PlantItemName.Habacus:
+                     selectedPrefab = habacusPrefab;
+                    break;
+                case PlantItemName.Palm:
+                     selectedPrefab = palmPrefab;
+                    break;
+                case PlantItemName.Polendron:
+                     selectedPrefab = polendronPrefab;
+                    break;
+                case PlantItemName.Snakeplant:
+                     selectedPrefab = snakeplantPrefab;
                     break;
 
                 default:
