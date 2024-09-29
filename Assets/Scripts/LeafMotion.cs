@@ -6,7 +6,7 @@ public class LeafMotion : MonoBehaviour
 {
      public float fallSpeed = 0.5f; // speed leaf falls
     public float swayAmplitude = 0.5f; // leaf sways
-    public float swayFrequency = 1.0f; // frequency of sway
+    public float swayFrequency = 2.0f; // frequency of sway
 
     private Rigidbody2D rb;
 

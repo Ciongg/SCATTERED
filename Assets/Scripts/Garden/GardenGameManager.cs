@@ -14,6 +14,7 @@ public class GardenGameManager : MonoBehaviour
         public string seedType;
         public float currentTaps;
         public int growthStage;
+        public int remainingCollectibles;
     }
 
     //json stuff
@@ -54,6 +55,7 @@ public class GardenGameManager : MonoBehaviour
 
     void Start()
     {
+        
         Application.targetFrameRate = 60;
         ecoCoinCount = PlayerPrefs.GetInt("EcoCoinCount", ecoCoinCount);
         ecoCoinText.text = ecoCoinCount.ToString();
@@ -109,7 +111,8 @@ public class GardenGameManager : MonoBehaviour
             {
                 seedType = plantTap.seedName,
                 currentTaps = plantTap.currentTaps,
-                growthStage = plantTap.GetCurrentGrowthStage()
+                growthStage = plantTap.GetCurrentGrowthStage(),
+                remainingCollectibles = plantTap.remainingCollectiblesSpawned
             };
 
             string jsonData = JsonUtility.ToJson(data);
@@ -126,7 +129,8 @@ public class GardenGameManager : MonoBehaviour
             PlantData data = JsonUtility.FromJson<PlantData>(jsonData);
 
             int seedPrefab = FindSeedPrefabByName(data.seedType);
-
+            pot = GameObject.Find("Pot");
+            spawn = pot.transform.Find("Spawn");
             GameObject plant = Instantiate(plantPrefabList[seedPrefab], spawn.position, Quaternion.identity);
             plant.transform.SetParent(spawn.transform);
 
@@ -140,6 +144,7 @@ public class GardenGameManager : MonoBehaviour
 
                 isAlreadyPlanted = true;
                 isInitialized = true;
+                plantTap.remainingCollectiblesSpawned = data.remainingCollectibles;
                 Debug.Log("Plant data loaded!");
             }
             else

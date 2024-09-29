@@ -27,7 +27,7 @@ public class LeafSystem : MonoBehaviour
             gameManager.AddLeaf(1, gameManager.leafMultiplier);
             Destroy(gameObject);
             GameObject leafInstance = Instantiate(leafParticles, transform.position, Quaternion.identity);
-            // ParticleSystem ps = GetComponent<ParticleSystem>();
+            
 
             Destroy(leafInstance, 2f);
         }

@@ -14,11 +14,13 @@ public class Basket : MonoBehaviour
     public PlantTap plantTap;
     private GameObject pot;
     private Transform spawn;
+
+    
     void Start()
     {
         
         rectTransform = GetComponent<RectTransform>();
-
+        
         // Start the basket off-screen
         rectTransform.anchoredPosition = startOffScreenPosition;
     }
@@ -35,6 +37,7 @@ public class Basket : MonoBehaviour
                  if (plantTap != null)
                 {
                     StartCoroutine(plantTap.SpawnBulkPlantCollectible(plantTap.donateCollectibleSpawnAmount, pot.transform.position));
+                    
                     
                 }
                 
@@ -65,8 +68,12 @@ public class Basket : MonoBehaviour
           
 
         }
+                // PlayerPrefs.SetInt("remainingCollectiblesSpawned", 0);
+                // PlayerPrefs.Save();
                 SlideOut();
                 ClearPlantDataFile();
+
+                
     }
 
      private void FindPlantTap()

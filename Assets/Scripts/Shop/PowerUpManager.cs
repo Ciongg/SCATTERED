@@ -15,7 +15,7 @@ public class PowerUpManager : MonoBehaviour
 
 
     public TextMeshProUGUI leafCountText;
-    public TextMeshProUGUI shopLeafCountText;
+   
 
     public float tapCount;
     public int leafMultiplier;

@@ -57,6 +57,12 @@ public class ShopManager : MonoBehaviour
     string updatedJson = JsonUtility.ToJson(existingData);
     PlayerPrefs.SetString("SeedData", updatedJson);
     PlayerPrefs.Save();
+
+    currentSunflower = 0;
+    currentGaollium = 0;
+    currentGerbaras = 0;
+    currentRareSeed = 0;
+    currentLegendarySeed = 0;
 }
 
 
@@ -99,6 +105,7 @@ public class ShopManager : MonoBehaviour
     public ShopItem[] itemsToAdd;
 
     void Start(){
+        
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateLeafText();
 
@@ -235,7 +242,7 @@ public class ShopManager : MonoBehaviour
 
         }
 
-         SaveSeedData();
+        
 
         
     }
@@ -310,6 +317,7 @@ public class ShopManager : MonoBehaviour
 
                 SaveSeedData();
                 ClearSpecificSlot(index);
+                Debug.Log("Sunflower: " + currentSunflower + "Gaollium: " + currentGaollium + "Gernaras: " + currentGerbaras + "Rare Seed Bag: " + currentRareSeed + "Legendary Seed Bag: " + currentLegendarySeed);
 
                 
         

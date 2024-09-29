@@ -43,7 +43,9 @@ public class MainMenu : MonoBehaviour
 
     public void Main()
     {
+        Time.timeScale = 1f; 
         SceneManager.LoadSceneAsync(0);
+        
     }
 
     public void ExitGame()

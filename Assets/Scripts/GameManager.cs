@@ -12,9 +12,14 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public int life = 5;
     public int leaf = 0; //for ingame text
-    int currentleaf; //for saved data also shown i nmenu
-    float currentTap;
+    int currentleaf; //for saved data also shown in menu
+    
     public int leafMultiplier;
+
+    public GameObject deathScreenPanel; 
+    public GameObject pauseScreenPanel; 
+    public TextMeshProUGUI finalScoreText; 
+    public TextMeshProUGUI finalLeafText; 
 
     //currentleaf = menu
     //leaf = game
@@ -24,16 +29,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Time.timeScale = 1f; 
         Application.targetFrameRate = 60;
         currentleaf = PlayerPrefs.GetInt("LeafCount", 0);
         leafMultiplier = PlayerPrefs.GetInt("LeafMultiplier", 1);
 
-        currentTap = PlayerPrefs.GetFloat("TapPower", currentTap);
+        
         UpdateScoreText();
         UpdateLifeText();
         UpdateLeafText();
-        
+
+        deathScreenPanel.SetActive(false);
+        pauseScreenPanel.SetActive(false);
 
     }
 
@@ -64,11 +71,37 @@ public class GameManager : MonoBehaviour
         if (life <= 0){
             life = 0;
             SaveLeafCount();
-            SceneManager.LoadSceneAsync(0);
+            
+            ShowDeathScreen();
         }
         UpdateLifeText();
         
     }
+
+    public void ShowDeathScreen()
+    {
+        
+        deathScreenPanel.SetActive(true);
+
+        
+        finalScoreText.text = "Final Score: " + score.ToString();
+        finalLeafText.text = "Total Leaves: " + leaf.ToString();
+ 
+    }
+
+    public void Pause(){
+        pauseScreenPanel.SetActive(true);
+        Time.timeScale = 0f; 
+    }
+
+    public void Unpause(){
+        pauseScreenPanel.SetActive(false);
+        Time.timeScale = 1f; 
+    }
+
+
+    
+
 
     public void AddLeaf(int leafGained, int leafMultiplier){
         leaf += leafGained * leafMultiplier; //adds to game

@@ -4,85 +4,103 @@ using UnityEngine;
 
 public class EcoCoinPickup : MonoBehaviour
 {
-    private Collider2D coinCollider; // Reference to the coin's collider
+    private Collider2D coinCollider; 
     private GardenGameManager gardenManager;
-    private SpriteRenderer spriteRenderer; // Reference to the coin's sprite renderer
-    private Color originalColor; // To store the original color of the coin
+    private SpriteRenderer spriteRenderer; 
+    private Color originalColor;
+    private float lifetime;  // Randomized lifetime for each coin
 
     private void Start()
     {
-        // Get the Collider2D and SpriteRenderer components of the coin
         gardenManager = GameObject.Find("GardenGameManager").GetComponent<GardenGameManager>();
         coinCollider = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        originalColor = spriteRenderer.color; // Store the original color
+        originalColor = spriteRenderer.color; 
 
-        // Start the coin's lifetime coroutine
-        StartCoroutine(CoinLifetime());
-    }
+        // Randomize the lifetime (between 5 and 10 seconds, for example)
+        lifetime = Random.Range(0.5f, 3f);
 
-    private void Update()
-    {
-        // Check for touch input on mobile
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            // Check if the touch is still on the screen
-            if (touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved)
-            {
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-
-                // Check if the touch position collides with the coin's collider
-                if (coinCollider.OverlapPoint(touchPosition))
-                {
-                    PickUpCoin();
-                }
-            }
-        }
-        // Simulate touch input with mouse on PC
-        else if (Input.GetMouseButton(0)) // Check if the left mouse button is held down
-        {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            // Check if the mouse position collides with the coin's collider
-            if (coinCollider.OverlapPoint(mousePosition))
-            {
-                PickUpCoin();
-            }
-        }
-    }
-
-    public void PickUpCoin()
-    {
-        // Optional: Add any additional logic here, like animations or sound effects
-
-        // Destroy the eco coin GameObject
         gardenManager.ecoCoinCount++;
         gardenManager.updateEcoCoinText();
-        Destroy(gameObject);
+
+        // Start the transparency fade effect
+        StartCoroutine(FadeOutCoin());
     }
 
-    private IEnumerator CoinLifetime()
+    private IEnumerator FadeOutCoin()
     {
-        float lifetime = 10f; // Total lifetime in seconds
-        float blinkStartTime = 2f; // Start blinking when 5 seconds remain
-        float blinkSpeed = 0.2f; // Speed of the blinking effect
+        float elapsedTime = 0f; // How long the coin has been alive
 
-        // Wait for the blink start time (5 seconds)
-        yield return new WaitForSeconds(lifetime - blinkStartTime);
-
-        // Start blinking
-        while (blinkStartTime > 0)
+        while (elapsedTime < lifetime)
         {
-            spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0); // Make the sprite invisible
-            yield return new WaitForSeconds(blinkSpeed); // Wait for the blink speed
-            spriteRenderer.color = originalColor; // Restore original color
-            yield return new WaitForSeconds(blinkSpeed); // Wait for the blink speed again
-            blinkStartTime -= blinkSpeed * 2; // Decrease the blink time after each full blink cycle
+            elapsedTime += Time.deltaTime;
+
+            // Calculate the alpha based on the elapsed time and lifetime
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / lifetime);
+            
+            // Apply the new color with the fading alpha
+            spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+
+            yield return null; // Wait for the next frame
         }
 
-        // Destroy the coin after the full lifetime
+        // Destroy the coin after its lifetime is over
         Destroy(gameObject);
     }
+    private void Update()
+    {
+        
+        // if (Input.touchCount > 0)
+        // {
+        //     Touch touch = Input.GetTouch(0);
+
+        //     // Check if the touch is still on the screen
+        //     if (touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved)
+        //     {
+        //         Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+
+        //         // Check if the touch position collides with the coin's collider
+        //         if (coinCollider.OverlapPoint(touchPosition))
+        //         {
+        //             PickUpCoin();
+        //         }
+        //     }
+        // }
+       
+        // else if (Input.GetMouseButton(0)) // Check if the left mouse button is held down
+        // {
+        //     Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        //     // Check if the mouse position collides with the coin's collider
+        //     if (coinCollider.OverlapPoint(mousePosition))
+        //     {
+        //         PickUpCoin();
+        //     }
+        // }
+    }
+
+    
+
+    // private IEnumerator CoinLifetime()
+    // {
+    //     float lifetime = 3f; 
+    //     float blinkStartTime = 2f; 
+    //     float blinkSpeed = 0.2f; 
+
+    //     // Wait for the blink start time (5 seconds)
+    //     yield return new WaitForSeconds(lifetime - blinkStartTime);
+
+    //     // Start blinking
+    //     while (blinkStartTime > 0)
+    //     {
+    //         spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0); 
+    //         yield return new WaitForSeconds(blinkSpeed); 
+    //         spriteRenderer.color = originalColor; 
+    //         yield return new WaitForSeconds(blinkSpeed); 
+    //         blinkStartTime -= blinkSpeed * 2; 
+    //     }
+
+    //     // Destroy the coin after the full lifetime
+    //     Destroy(gameObject);
+    // }
 }
