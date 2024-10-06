@@ -7,8 +7,9 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
     public TextMeshProUGUI leafText;
-    
+    public CharacterDialogue characterDialogue;
     public int currentLeaf = 0;
+
     void Start(){
         
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
@@ -60,6 +61,36 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.Save();
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
         UpdateLeafText();
+    }
+
+
+       public void OnHoverPlayGame()
+    {
+        characterDialogue.ShowTalkDialogue("Start your adventure!"); 
+    }
+
+    // Called when hovering over the "Play Garden" button
+    public void OnHoverPlayGarden()
+    {
+        characterDialogue.ShowTalkDialogue("Tend to your garden!"); 
+    }
+
+    // Called when hovering over the "Play Shop" button
+    public void OnHoverPlayShop()
+    {
+        characterDialogue.ShowTalkDialogue("Visit the shop!"); 
+    }
+
+    // Called when hovering over the "Exit Game" button
+    public void OnHoverExitGame()
+    {
+        characterDialogue.ShowTalkDialogue("Goodbye! See you next time."); 
+    }
+
+    // Called when the mouse exits a button
+    public void OnExitHover()
+    {
+        characterDialogue.HideDialogue();
     }
 
     

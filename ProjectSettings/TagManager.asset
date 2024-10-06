@@ -20,6 +20,9 @@ TagManager:
   - palm
   - polendron
   - habacus
+  - extralife
+  - timeslow
+  - smog
   layers:
   - Default
   - TransparentFX

@@ -16,7 +16,7 @@ public class LeafMotion : MonoBehaviour
         rb.gravityScale = fallSpeed; 
     }
 
-    void Update()
+    void Update() 
     {
         
         Vector3 position = transform.position;

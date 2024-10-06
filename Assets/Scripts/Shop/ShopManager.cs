@@ -198,12 +198,12 @@ public class ShopManager : MonoBehaviour
 
                 if (texts.Length >= 2)
                 {
-                        // Assuming the first text is for rarity and the second is for price
+                        
                     TextMeshProUGUI priceText = texts[0];
                     TextMeshProUGUI rarityText = texts[1];
 
-                        // Update the rarity and price text based on the item's details
-                    rarityText.text = item.rarity.ToString() + " seed"; // Display the rarity
+                    // Update the rarity and price text based on the item's details
+                    rarityText.text = item.itemName.ToString() + " seed"; // Display the rarity
                     priceText.text = item.cost + " leaves";   // Display the price
                 }
                 else
@@ -383,8 +383,7 @@ public class ShopManager : MonoBehaviour
     public void RefreshShop(){
 
 
-         for (int i = 0; i < inventorySlots.Length; i++)
-        {
+       
            
 
               
@@ -402,7 +401,7 @@ public class ShopManager : MonoBehaviour
 
                 }
               
-        }
+        
 
 
         
@@ -423,7 +422,7 @@ public class ShopManager : MonoBehaviour
 
             if (!result)
             {
-                Debug.Log("Failed to add item to slot " + i);
+                // Debug.Log("Failed to add item to slot " + i);
             }
         }
 

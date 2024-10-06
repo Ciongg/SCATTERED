@@ -185,3 +185,4 @@ MonoBehaviour:
   particlePrefab: {fileID: 5237543344863476034, guid: c2bdc924cda5eee4d94295708a8342e5, type: 3}
   wrongParticlePrefab: {fileID: 8908775213319364053, guid: a2cc05db74ddc10489ac655cfed2a07b, type: 3}
   trashBinCollider: {fileID: 4830941766031816153}
+  characterDialogue: {fileID: 0}

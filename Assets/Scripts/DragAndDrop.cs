@@ -15,11 +15,13 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public bool drawDragLine = true;
     public Color lineColor = Color.red;
     public string originalTag;
+    public CharacterDialogue characterDialogue;
 
     private static Dictionary<int, DragAndDrop> activeDrags = new Dictionary<int, DragAndDrop>();
 
     void Start()
     {
+        characterDialogue = GameObject.Find("CharacterPanel").GetComponent<CharacterDialogue>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -117,6 +119,7 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         if (collision.collider.tag == "Deadly")
         {
             gameManager.LoseLife(1);
+            characterDialogue.ShowTrashFallDialogue();
             Destroy(gameObject);
         }
     }

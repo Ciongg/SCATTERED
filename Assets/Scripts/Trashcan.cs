@@ -15,10 +15,15 @@ public class Trashcan : MonoBehaviour
     GameManager gameManager;
     public Collider2D trashBinCollider; 
 
+    public CharacterDialogue characterDialogue;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        characterDialogue = GameObject.Find("CharacterPanel").GetComponent<CharacterDialogue>();
 
     }
 
@@ -29,7 +34,12 @@ public class Trashcan : MonoBehaviour
     }
 
     void WrongAnswer(Collider2D collider){
-        Debug.Log("Wrong");
+        int dialogueToShowIndex = Random.Range(0, characterDialogue.wrongAnswersText.Length);
+
+        string dialogueToShow = characterDialogue.wrongAnswersText[dialogueToShowIndex];
+
+        characterDialogue.ShowAssuranceDialogue(dialogueToShow);
+        
             gameManager.LoseLife(1);
             PlayWrongParticle();
             Destroy(collider.gameObject);
@@ -37,8 +47,13 @@ public class Trashcan : MonoBehaviour
     }
 
     void CorrectAnswer(Collider2D collider){
-         Debug.Log("Correct");
-            gameManager.AddScore(Random.Range(10, 16));   
+         int dialogueToShowIndex = Random.Range(0, characterDialogue.rightAnswersText.Length);
+        
+        string dialogueToShow = characterDialogue.rightAnswersText[dialogueToShowIndex];
+
+        characterDialogue.ShowSmileDialogue(dialogueToShow);
+        
+            gameManager.AddScore(Random.Range(10, 20));   
             Destroy(collider.gameObject);
             PlayParticle();
     }

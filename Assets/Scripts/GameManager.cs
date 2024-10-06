@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public int life = 5;
     public int leaf = 0; //for ingame text
     int currentleaf; //for saved data also shown in menu
-    
+    public GameObject smogPrefab;
     public int leafMultiplier;
 
     public GameObject deathScreenPanel; 
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
 
 
     
-
+    
 
     public void AddLeaf(int leafGained, int leafMultiplier){
         leaf += leafGained * leafMultiplier; //adds to game
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = score.ToString();
     }
 
-    void UpdateLifeText(){
+   public void UpdateLifeText(){
         lifeText.text = life.ToString();
     }
 
@@ -126,5 +126,77 @@ public class GameManager : MonoBehaviour
     public int GetScore(){
         return score;
     }
+
+    public void StartSlowTime(float slowTimeDuration)
+    {
+        StartCoroutine(SlowTimeEffect(slowTimeDuration));
+    }
+
+     private IEnumerator SlowTimeEffect(float slowTimeDuration)
+    {
+       
+        Time.timeScale = 0.5f;
+        
+        yield return new WaitForSecondsRealtime(slowTimeDuration);
+
+
+        Time.timeScale = 1f;
+    }
+
+
+    public void ActivateSmog(float smogActiveLength)
+    {
+        GameObject smogInstance = Instantiate(smogPrefab, Vector3.zero, Quaternion.identity); // Instantiate the smog at the center (or set position as needed)
+        StartCoroutine(FadeInSmog(smogInstance, smogActiveLength));
+    }
+
+    IEnumerator FadeInSmog(GameObject smog, float smogActiveLength)
+    {
+        // Get the Renderer component to control fading
+        Renderer renderer = smog.GetComponent<Renderer>();
+        Color color = renderer.material.color; // Get the material color
+        color.a = 0f; // Start with smog completely transparent
+        renderer.material.color = color; // Apply the transparency
+
+        float fadeDuration = 2f; // Duration for fading in
+        float timePassed = 0f;
+
+        while (timePassed < fadeDuration)
+        {
+            color.a = Mathf.Lerp(0f, 1f, timePassed / fadeDuration); // Fade in effect
+            renderer.material.color = color; // Apply the new color
+            timePassed += Time.deltaTime;
+            yield return null; // Wait until the next frame
+        }
+
+        color.a = 1f; // Ensure the smog is fully opaque
+        renderer.material.color = color; // Apply the final color
+
+        yield return new WaitForSeconds(smogActiveLength); 
+        StartCoroutine(FadeOutSmog(smog));
+    }
+
+    IEnumerator FadeOutSmog(GameObject smog)
+    {
+        // Get the Renderer component to control fading
+        Renderer renderer = smog.GetComponent<Renderer>();
+        Color color = renderer.material.color; // Get the material color
+        float fadeDuration = 5f; 
+        float timePassed = 0f;
+
+        while (timePassed < fadeDuration)
+        {
+            color.a = Mathf.Lerp(1f, 0f, timePassed / fadeDuration); // Fade out effect
+            renderer.material.color = color; // Apply the new color
+            timePassed += Time.deltaTime;
+            yield return null; // Wait until the next frame
+        }
+
+        color.a = 0f; // Ensure the smog is completely transparent
+        renderer.material.color = color; // Apply the final color
+        Destroy(smog); // Destroy the smog instance
+    }
+
+
 
 }
