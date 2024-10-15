@@ -24,11 +24,6 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync(1);
-    }
-
-    public void PlayGame2()
-    {
         SceneManager.LoadSceneAsync(2);
     }
 
@@ -42,10 +37,15 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync(4);
     }
 
+    public void PlayLeaderboards()
+    {
+        SceneManager.LoadSceneAsync(5);
+    }
+
     public void Main()
     {
         Time.timeScale = 1f; 
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadSceneAsync(1);
         
     }
 
@@ -66,7 +66,7 @@ public class MainMenu : MonoBehaviour
 
        public void OnHoverPlayGame()
     {
-        characterDialogue.ShowTalkDialogue("Start your adventure!"); 
+        characterDialogue.ShowTalkDialogue("Let's segregate some trash!"); 
     }
 
     // Called when hovering over the "Play Garden" button

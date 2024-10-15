@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Firebase.Auth;
+using Firebase.Database;
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
@@ -21,6 +23,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI finalScoreText; 
     public TextMeshProUGUI finalLeafText; 
 
+    private DatabaseReference databaseReference;
+
+    public int totalTrashThrown= 0;
+
     //currentleaf = menu
     //leaf = game
 
@@ -34,13 +40,15 @@ public class GameManager : MonoBehaviour
         currentleaf = PlayerPrefs.GetInt("LeafCount", 0);
         leafMultiplier = PlayerPrefs.GetInt("LeafMultiplier", 1);
 
-        
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         UpdateScoreText();
         UpdateLifeText();
         UpdateLeafText();
 
         deathScreenPanel.SetActive(false);
         pauseScreenPanel.SetActive(false);
+
+        totalTrashThrown = PlayerPrefs.GetInt("totalTrashThrown", totalTrashThrown);
 
     }
 
@@ -63,7 +71,30 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int points){
         score += points;
+        totalTrashThrown++;
         UpdateScoreText();
+        PlayerPrefs.SetInt("totalTrashThrown", totalTrashThrown);
+        UpdateTrashThrownInDatabase(totalTrashThrown);
+        
+    }
+
+    public void UpdateTrashThrownInDatabase(int trashThrown)
+    {
+        Debug.Log("UPDATING TRASHTHROWN");
+        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId; // Get the current user ID
+
+        // Set the ecoCoins value in the database
+        databaseReference.Child("users").Child(userId).Child("trashThrown").SetValueAsync(trashThrown).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("trashThrown updated successfully in database.");
+            }
+            else
+            {
+                Debug.LogError("Failed to update trashThrown: " + task.Exception);
+            }
+        });
     }
 
     public void LoseLife(int lifeDeduct){
@@ -113,6 +144,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateScoreText(){
         scoreText.text = score.ToString();
+       
     }
 
    public void UpdateLifeText(){

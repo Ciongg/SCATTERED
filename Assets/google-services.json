@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "665961174335",
+    "firebase_url": "https://scatter-b355c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "scatter-b355c",
+    "storage_bucket": "scatter-b355c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665961174335:android:5c57a54e192cb6fd60af8a",
+        "android_client_info": {
+          "package_name": "com.synthesis.scatter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzHwvstXYW2cDeeZy9BWEgTyG8rdG9cDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

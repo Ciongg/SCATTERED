@@ -56,6 +56,8 @@ public class Trashcan : MonoBehaviour
             gameManager.AddScore(Random.Range(10, 20));   
             Destroy(collider.gameObject);
             PlayParticle();
+
+            
     }
 
     

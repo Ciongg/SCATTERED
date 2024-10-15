@@ -5,7 +5,8 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
-
+using Firebase.Database;
+using Firebase.Auth;
 public class GardenGameManager : MonoBehaviour
 {
 
@@ -34,6 +35,8 @@ public class GardenGameManager : MonoBehaviour
     public bool isInitialized;
     public bool isAlreadyPlanted;
 
+    private DatabaseReference databaseReference;
+
     public GameObject [] plantPrefabList; // list of prefabsPlants
 
     //on load save data
@@ -50,12 +53,13 @@ public class GardenGameManager : MonoBehaviour
     public void updateEcoCoinText(){
         PlayerPrefs.SetInt("EcoCoinCount", ecoCoinCount);
         ecoCoinText.text = ecoCoinCount.ToString();
+        UpdateEcoCoinInDatabase(ecoCoinCount);
     }
 
 
     void Start()
     {
-        
+          databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         Application.targetFrameRate = 60;
         ecoCoinCount = PlayerPrefs.GetInt("EcoCoinCount", ecoCoinCount);
         ecoCoinText.text = ecoCoinCount.ToString();
@@ -84,6 +88,23 @@ public class GardenGameManager : MonoBehaviour
         }
     }
 
+      private void UpdateEcoCoinInDatabase(int ecoCoins)
+    {
+        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId; // Get the current user ID
+
+        // Set the ecoCoins value in the database
+        databaseReference.Child("users").Child(userId).Child("ecoCoins").SetValueAsync(ecoCoins).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("EcoCoins updated successfully in database.");
+            }
+            else
+            {
+                Debug.LogError("Failed to update EcoCoins: " + task.Exception);
+            }
+        });
+    }
 
     private int FindSeedPrefabByName(string seedName)
     {
