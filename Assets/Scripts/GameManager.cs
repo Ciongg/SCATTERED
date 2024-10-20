@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using Firebase.Auth;
-using Firebase.Database;
+
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
@@ -23,9 +22,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI finalScoreText; 
     public TextMeshProUGUI finalLeafText; 
 
-    private DatabaseReference databaseReference;
 
     public int totalTrashThrown= 0;
+
+    public PlayerDataManager playerDataManager;
+    
 
     //currentleaf = menu
     //leaf = game
@@ -35,12 +36,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         Time.timeScale = 1f; 
         Application.targetFrameRate = 60;
-        currentleaf = PlayerPrefs.GetInt("LeafCount", 0);
-        leafMultiplier = PlayerPrefs.GetInt("LeafMultiplier", 1);
+        currentleaf = playerDataManager.GetLeafCount();
+        leafMultiplier = playerDataManager.GetLeafMultiplier();
 
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        
         UpdateScoreText();
         UpdateLifeText();
         UpdateLeafText();
@@ -48,7 +50,7 @@ public class GameManager : MonoBehaviour
         deathScreenPanel.SetActive(false);
         pauseScreenPanel.SetActive(false);
 
-        totalTrashThrown = PlayerPrefs.GetInt("totalTrashThrown", totalTrashThrown);
+        totalTrashThrown = playerDataManager.GetTrashThrown();
 
     }
 
@@ -71,31 +73,31 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int points){
         score += points;
-        totalTrashThrown++;
+        
         UpdateScoreText();
-        PlayerPrefs.SetInt("totalTrashThrown", totalTrashThrown);
-        UpdateTrashThrownInDatabase(totalTrashThrown);
+        playerDataManager.UpdateTrashThrown(1);
+        // UpdateTrashThrownInDatabase(totalTrashThrown);
         
     }
 
-    public void UpdateTrashThrownInDatabase(int trashThrown)
-    {
-        Debug.Log("UPDATING TRASHTHROWN");
-        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId; // Get the current user ID
+    // public void UpdateTrashThrownInDatabase(int trashThrown)
+    // {
+    //     Debug.Log("UPDATING TRASHTHROWN");
+    //     string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId; // Get the current user ID
 
-        // Set the ecoCoins value in the database
-        databaseReference.Child("users").Child(userId).Child("trashThrown").SetValueAsync(trashThrown).ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                Debug.Log("trashThrown updated successfully in database.");
-            }
-            else
-            {
-                Debug.LogError("Failed to update trashThrown: " + task.Exception);
-            }
-        });
-    }
+    //     // Set the ecoCoins value in the database
+    //     databaseReference.Child("users").Child(userId).Child("trashThrown").SetValueAsync(trashThrown).ContinueWith(task =>
+    //     {
+    //         if (task.IsCompleted)
+    //         {
+    //             Debug.Log("trashThrown updated successfully in database.");
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("Failed to update trashThrown: " + task.Exception);
+    //         }
+    //     });
+    // }
 
     public void LoseLife(int lifeDeduct){
         life -= lifeDeduct;
@@ -136,7 +138,8 @@ public class GameManager : MonoBehaviour
 
     public void AddLeaf(int leafGained, int leafMultiplier){
         leaf += leafGained * leafMultiplier; //adds to game
-        currentleaf += leafGained * leafMultiplier; //adds to playerprefs
+        int tempLeafCount = leafGained * leafMultiplier; //adds to playerprefs
+        playerDataManager.UpdateLeafCount(tempLeafCount, true);
         UpdateLeafText();
 
     }

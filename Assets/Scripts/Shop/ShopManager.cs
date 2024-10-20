@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Firebase.Auth;
+using Firebase.Database;
 
 [System.Serializable]
 public class SeedData
@@ -36,7 +38,7 @@ public class SeedData
 public class ShopManager : MonoBehaviour
 {   
 
-
+    
     public void SaveSeedData()
 {
     // Load existing data first
@@ -132,9 +134,18 @@ public class ShopManager : MonoBehaviour
 
     public ShopItem[] itemsToAdd;
 
+    public PlayerDataManager playerDataManager;
+    public bool playerAuthenticated;
+    public string userId;
+    
+
+    public DatabaseReference databaseReference;
+    
     void Start(){
-        
-        currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
+
+        userId = PlayerDataManager.Instance.userId;
+        currentLeaf = playerDataManager.GetLeafCount();
+            
         UpdateLeafText();
 
 
@@ -154,9 +165,19 @@ public class ShopManager : MonoBehaviour
             LoadShopTexts();
         }
 
+
+
+
         
         
     }
+
+    void OnEnable(){
+        currentLeaf = playerDataManager.GetLeafCount();
+        UpdateLeafText();
+    }
+
+   
 
     private void SaveShopSlots(){
         //loops through all inventory slots
@@ -330,7 +351,7 @@ public class ShopManager : MonoBehaviour
         ItemInShop itemInShop = slot.GetComponentInChildren<ItemInShop>();
         ShopItem item = itemInShop.item;
 
-        if(currentLeaf >= item.cost){
+        if(playerDataManager.GetLeafCount() >= item.cost){
             MinusLeaf(item.cost);
 
             switch(item.type){
@@ -388,8 +409,8 @@ public class ShopManager : MonoBehaviour
 
               
 
-                 if(currentLeaf >= 50){
-
+                 if(playerDataManager.GetLeafCount() >= 50){
+                    
                     Debug.Log("Refresh Successful");
                     MinusLeaf(50);
                     StartCoroutine(RefreshShopCoroutine());
@@ -409,7 +430,7 @@ public class ShopManager : MonoBehaviour
 
       private IEnumerator RefreshShopCoroutine()
     {
-       Debug.Log("Refresh Shop Coroutine");
+       
         ClearAllSlots();
 
         yield return new WaitForSeconds(0.1f);
@@ -472,7 +493,7 @@ public class ShopManager : MonoBehaviour
         // Now save the shop slots after clearing
         SaveShopSlots();
         
-        Debug.Log("Shop slots saved after clearing.");
+        
     }
 
     public void UpdateLeafText(){
@@ -481,16 +502,14 @@ public class ShopManager : MonoBehaviour
 
 
     public void AddLeaf(int amount){
-        currentLeaf += amount;
-        PlayerPrefs.SetInt("LeafCount", currentLeaf);
-        PlayerPrefs.Save();
+        int tempCurrentLeaf = amount;
+        playerDataManager.UpdateLeafCount(tempCurrentLeaf, true);
         UpdateLeafText();
     }
 
     public void MinusLeaf(int amount){
-        currentLeaf -= amount;
-        PlayerPrefs.SetInt("LeafCount", currentLeaf);
-        PlayerPrefs.Save();
+        int tempCurrentLeaf = amount;
+        playerDataManager.UpdateLeafCount(tempCurrentLeaf, false);
         UpdateLeafText();
     }
 

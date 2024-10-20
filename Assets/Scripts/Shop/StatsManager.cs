@@ -13,11 +13,12 @@ public class StatsManager : MonoBehaviour
     public TextMeshProUGUI leafMultiplierText;
     public TextMeshProUGUI minusSpawnTimeText;
 
-
+    public PlayerDataManager playerDataManager;
+      
     void OnEnable(){
-        tapCount = PlayerPrefs.GetFloat("TapPower", 1);
-        leafMultiplier = PlayerPrefs.GetInt("LeafMultiplier", leafMultiplier);
-        minusSpawnTime = PlayerPrefs.GetFloat("MinusSpawnTime", 0);
+        tapCount = playerDataManager.GetTapPower();
+        leafMultiplier = playerDataManager.GetLeafMultiplier();
+        minusSpawnTime = playerDataManager.GetMinusSpawnTime();
 
         tapText.text = "Tap Power: " + tapCount.ToString();
         leafMultiplierText.text = "Bonus Leaf: " + leafMultiplier.ToString();

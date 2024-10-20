@@ -15,6 +15,7 @@ public class AuthManager : MonoBehaviour
     public FirebaseUser User;
 
     public DatabaseReference databaseReference;
+    public PlayerDataManager playerDataManager;
 
     //Login variables
     [Header("Login")]
@@ -25,6 +26,8 @@ public class AuthManager : MonoBehaviour
 
     public TMP_Text signedInAs;
 
+    public GameObject playBtn;
+
     //Register variables
     [Header("Register")]
     public TMP_InputField usernameRegisterField;
@@ -32,6 +35,8 @@ public class AuthManager : MonoBehaviour
     public TMP_InputField passwordRegisterField;
     public TMP_InputField passwordRegisterVerifyField;
     public TMP_Text warningRegisterText;
+
+
 
 
     void Awake()
@@ -155,8 +160,61 @@ public class AuthManager : MonoBehaviour
             confirmLoginText.text = "Logged In";
             signedInAs.gameObject.SetActive(true);
             signedInAs.text = "Signed in as: " + User.DisplayName;
+            
+            yield return SetPlayerPrefsFromDatabase(User.UserId);
+            PlayerDataManager.Instance.SetUserId(User.UserId);
+            playBtn.SetActive(true);
+            
+            
         }
     }
+
+   private IEnumerator SetPlayerPrefsFromDatabase(string userId)
+{
+    var userRef = databaseReference.Child("users").Child(userId);
+    Task<DataSnapshot> snapshotTask = userRef.GetValueAsync();
+
+    // Wait until the snapshot task completes
+    yield return new WaitUntil(() => snapshotTask.IsCompleted);
+
+    if (snapshotTask.Exception != null)
+    {
+        Debug.LogError("Failed to retrieve user data: " + snapshotTask.Exception);
+        yield break; // Exit if there was an error
+    }
+
+    DataSnapshot snapshot = snapshotTask.Result;
+    Debug.Log(snapshot.GetRawJsonValue()); // Logs the entire snapshot as a JSON string
+
+    if (snapshot.Exists)
+    {
+        // Set the player prefs to values from the database
+        PlayerPrefs.SetInt("ecoCoinCount", int.Parse(snapshot.Child("Leaderboards").Child("ecoCoinCount").Value.ToString()));
+        PlayerPrefs.SetInt("LeafCount", int.Parse(snapshot.Child("Leaderboards").Child("LeafCount").Value.ToString()));
+        PlayerPrefs.SetInt("totalTrashThrown", int.Parse(snapshot.Child("Leaderboards").Child("totalTrashThrown").Value.ToString()));
+
+        PlayerPrefs.SetFloat("TapPower", float.Parse(snapshot.Child("Powerups").Child("TapPower").Value.ToString()));
+        PlayerPrefs.SetInt("LeafMultiplier", int.Parse(snapshot.Child("Powerups").Child("LeafMultiplier").Value.ToString()));
+        PlayerPrefs.SetFloat("MinusSpawnTime", float.Parse(snapshot.Child("Powerups").Child("MinusSpawnTime").Value.ToString()));
+
+        PlayerPrefs.SetInt("IncreaseTapLvl", int.Parse(snapshot.Child("PowerupsLvl").Child("IncreaseTapLvl").Value.ToString()));
+        PlayerPrefs.SetInt("IncreaseLeafMultiplierLvl", int.Parse(snapshot.Child("PowerupsLvl").Child("IncreaseLeafMultiplierLvl").Value.ToString()));
+        PlayerPrefs.SetInt("IncreaseMinusSpawnTimeLvl", int.Parse(snapshot.Child("PowerupsLvl").Child("IncreaseMinusSpawnTimeLvl").Value.ToString()));
+
+        PlayerPrefs.SetInt("IncreaseTapCost", int.Parse(snapshot.Child("Cost").Child("IncreaseTapCost").Value.ToString()));
+        PlayerPrefs.SetInt("IncreaseLeafMultiplierCost", int.Parse(snapshot.Child("Cost").Child("IncreaseLeafMultiplierCost").Value.ToString()));
+        PlayerPrefs.SetInt("IncreaseMinusSpawnTimeCost", int.Parse(snapshot.Child("Cost").Child("IncreaseMinusSpawnTimeCost").Value.ToString()));
+
+        PlayerPrefs.Save();
+    }
+    else
+    {
+        Debug.Log("User data does not exist in the database.");
+    }
+}
+
+
+    
 
     private IEnumerator Register(string _email, string _password, string _username)
     {
@@ -234,6 +292,9 @@ public class AuthManager : MonoBehaviour
                         //Now return to login screen
                         databaseReference.Child("usernames").Child(_username).SetValueAsync(true);
                         databaseReference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
+                        ResetPlayerPrefs();
+                        InitializePlayerPrefs(User.UserId);
+
                         UIManager.instance.LoginScreen();
                         warningRegisterText.gameObject.SetActive(false);
                     }
@@ -241,6 +302,56 @@ public class AuthManager : MonoBehaviour
             }
         }
     }
+
+    private void ResetPlayerPrefs(){
+
+        // This will clear all saved PlayerPrefs
+        PlayerPrefs.DeleteAll();  
+        
+
+
+        PlayerPrefs.SetInt("ecoCoins", 0);
+        PlayerPrefs.SetInt("LeafCount", 0);
+        PlayerPrefs.SetInt("totalTrashThrown", 0);
+        PlayerPrefs.SetFloat("TapPower", 1.0f);
+        PlayerPrefs.SetInt("LeafMultiplier", 1);
+        PlayerPrefs.SetFloat("MinusSpawnTime", 0.0f);
+
+        // Initialize levels and costs
+        PlayerPrefs.SetInt("IncreaseTapLvl", 1);
+        PlayerPrefs.SetInt("IncreaseLeafMultiplierLvl", 1);
+        PlayerPrefs.SetInt("IncreaseMinusSpawnTimeLvl", 1);
+
+        PlayerPrefs.SetInt("IncreaseTapCost", 10);
+        PlayerPrefs.SetInt("IncreaseLeafMultiplierCost", 10);
+        PlayerPrefs.SetInt("IncreaseMinusSpawnTimeCost", 10);
+    }
+
+    private void InitializePlayerPrefs(string userId)
+{
+    // Reference to the user data in the database
+    var userRef = databaseReference.Child("users").Child(userId);
+
+    // Add Leaderboard data
+    userRef.Child("Leaderboards").Child("LeafCount").SetValueAsync(PlayerPrefs.GetInt("LeafCount", 0));
+    userRef.Child("Leaderboards").Child("totalTrashThrown").SetValueAsync(PlayerPrefs.GetInt("totalTrashThrown", 0));
+    userRef.Child("Leaderboards").Child("ecoCoinCount").SetValueAsync(PlayerPrefs.GetInt("ecoCoinCount", 0));
+
+    // Add Powerups data
+    userRef.Child("Powerups").Child("TapPower").SetValueAsync(PlayerPrefs.GetFloat("TapPower", 1.0f));
+    userRef.Child("Powerups").Child("LeafMultiplier").SetValueAsync(PlayerPrefs.GetInt("LeafMultiplier", 1));
+    userRef.Child("Powerups").Child("MinusSpawnTime").SetValueAsync(PlayerPrefs.GetFloat("MinusSpawnTime", 0.0f));
+
+    // Add Powerups Level data
+    userRef.Child("PowerupsLvl").Child("IncreaseTapLvl").SetValueAsync(PlayerPrefs.GetInt("IncreaseTapLvl", 1));
+    userRef.Child("PowerupsLvl").Child("IncreaseLeafMultiplierLvl").SetValueAsync(PlayerPrefs.GetInt("IncreaseLeafMultiplierLvl", 1));
+    userRef.Child("PowerupsLvl").Child("IncreaseMinusSpawnTimeLvl").SetValueAsync(PlayerPrefs.GetInt("IncreaseMinusSpawnTimeLvl", 1));
+
+    // Add Cost data
+    userRef.Child("Cost").Child("IncreaseTapCost").SetValueAsync(PlayerPrefs.GetInt("IncreaseTapCost", 0));
+    userRef.Child("Cost").Child("IncreaseLeafMultiplierCost").SetValueAsync(PlayerPrefs.GetInt("IncreaseLeafMultiplierCost", 0));
+    userRef.Child("Cost").Child("IncreaseMinusSpawnTimeCost").SetValueAsync(PlayerPrefs.GetInt("IncreaseMinusSpawnTimeCost", 0));
+}
 
     private void ShowWarning(TMP_Text warningText, string message)
     {

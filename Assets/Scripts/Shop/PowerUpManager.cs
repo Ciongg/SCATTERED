@@ -32,14 +32,26 @@ public class PowerUpManager : MonoBehaviour
     public ShopManager shopManager;
 
     int leafCount;
+
+    public PlayerDataManager playerDataManager;
+
+    public TMP_Text menuLeafText;
+
+    string userId = "";
+
+
     // Start is called before the first frame update
     void OnEnable()
     {
+        
+        userId = PlayerDataManager.Instance.userId;
+        
+
         tapCount = PlayerPrefs.GetFloat("TapPower", 1);
         leafMultiplier = PlayerPrefs.GetInt("LeafMultiplier", leafMultiplier);
         minusSpawnTime = PlayerPrefs.GetFloat("MinusSpawnTime", 0);
        
-        leafCount = PlayerPrefs.GetInt("LeafCount", 0);
+        leafCount = playerDataManager.GetLeafCount();;
 
         IncreaseTapLvl = PlayerPrefs.GetInt("IncreaseTapLvl", 1);
         IncreaseLeafMultiplierLvl = PlayerPrefs.GetInt("IncreaseLeafMultiplierLvl", 1);
@@ -60,29 +72,37 @@ public class PowerUpManager : MonoBehaviour
 
         leafCountText.text = leafCount.ToString();
 
+      
+
         
         
     }
 
     void OnDisable(){
-        PlayerPrefs.SetInt("leafCount", leafCount);
+        leafCount = playerDataManager.GetLeafCount();
+        menuLeafText.text = leafCount.ToString();
         
     }
 
     public void IncreaseTap(float amount){
+        leafCount = playerDataManager.GetLeafCount();
+        IncreaseTapCost = playerDataManager.GetIncreaseTapCost();
         if(leafCount >= IncreaseTapCost){
+        
         tapCount = Mathf.Round((tapCount + amount) * 100f) / 100f;
-        leafCount -= IncreaseTapCost;
-        shopManager.MinusLeaf(IncreaseTapCost);
-        leafCountText.text = leafCount.ToString();
         IncreaseTapLvl++;
 
-        PlayerPrefs.SetFloat("TapPower", tapCount);
-        PlayerPrefs.SetInt("LeafCount", leafCount);
-        PlayerPrefs.SetInt("IncreaseTapLvl", IncreaseTapLvl);
+        playerDataManager.UpdateTapPower(tapCount);
+        playerDataManager.UpdateLeafCount(IncreaseTapCost, false);
+        playerDataManager.UpdateIncreaseTapLvl(IncreaseTapLvl);
+        
+
+        // PlayerPrefs.SetFloat("TapPower", tapCount);
+        // PlayerPrefs.SetInt("LeafCount", leafCount);
+        // PlayerPrefs.SetInt("IncreaseTapLvl", IncreaseTapLvl);
         tapCostText.text = "Cost: " + IncreaseTapCost;
         tapLvlText.text = "Lvl:" + IncreaseTapLvl;
-
+        leafCountText.text = playerDataManager.GetLeafCount().ToString();
         CheckForCostIncrease(ref IncreaseTapLvl, ref IncreaseTapCost, "IncreaseTapCost", 10f);
         PlayerPrefs.Save();
         }
@@ -90,18 +110,22 @@ public class PowerUpManager : MonoBehaviour
     }
 
     public void IncreaseLeafMultiplier(int amount){
+        leafCount = playerDataManager.GetLeafCount();
+        IncreaseLeafMultiplierCost = playerDataManager.GetIncreaseLeafMultiplierCost();
         if(leafCount >= IncreaseLeafMultiplierCost){
         leafMultiplier += amount;
-        leafCount -= IncreaseLeafMultiplierCost;
-        shopManager.MinusLeaf(IncreaseLeafMultiplierCost);
-        leafCountText.text = leafCount.ToString();
         IncreaseLeafMultiplierLvl++;
 
-        PlayerPrefs.SetInt("LeafMultiplier", leafMultiplier);
-        PlayerPrefs.SetInt("LeafCount", leafCount);
-        PlayerPrefs.SetInt("IncreaseLeafMultiplierLvl", IncreaseLeafMultiplierLvl);
+        playerDataManager.UpdateLeafMultiplier(leafMultiplier);
+        playerDataManager.UpdateLeafCount(IncreaseLeafMultiplierCost, false);
+        playerDataManager.UpdateIncreaseLeafMultiplierLvl(IncreaseLeafMultiplierLvl);
+
+        // PlayerPrefs.SetInt("LeafMultiplier", leafMultiplier);
+        // PlayerPrefs.SetInt("LeafCount", leafCount);
+        // PlayerPrefs.SetInt("IncreaseLeafMultiplierLvl", IncreaseLeafMultiplierLvl);
         leafCostText.text = "Cost: " + IncreaseLeafMultiplierCost;
         leafLvlText.text = "Lvl: " + IncreaseLeafMultiplierLvl;
+        leafCountText.text = playerDataManager.GetLeafCount().ToString();
         CheckForCostIncrease(ref IncreaseLeafMultiplierLvl, ref IncreaseLeafMultiplierCost, "IncreaseLeafMultiplierCost", 20f);
         
         PlayerPrefs.Save();
@@ -109,17 +133,23 @@ public class PowerUpManager : MonoBehaviour
     }
 
     public void IncreaseMinusSpawnTime(float amount){
+        leafCount = playerDataManager.GetLeafCount();
+        IncreaseMinusSpawnTimeCost = playerDataManager.GetIncreaseMinusSpawnTimeCost();
         if(leafCount >= IncreaseMinusSpawnTimeCost){
         minusSpawnTime = Mathf.Round((minusSpawnTime + amount) * 100f) / 100f;
-        leafCount -= IncreaseMinusSpawnTimeCost;
-        shopManager.MinusLeaf(IncreaseMinusSpawnTimeCost);
-        leafCountText.text = leafCount.ToString();
         IncreaseMinusSpawnTimeLvl++;
-        PlayerPrefs.SetFloat("MinusSpawnTime", minusSpawnTime);
-        PlayerPrefs.SetInt("LeafCount", leafCount);
-        PlayerPrefs.SetInt("IncreaseMinusSpawnTimeLvl", IncreaseMinusSpawnTimeLvl);
+
+
+        playerDataManager.UpdateMinusSpawnTime(minusSpawnTime);
+        playerDataManager.UpdateLeafCount(IncreaseMinusSpawnTimeCost, false);
+        playerDataManager.UpdateIncreaseMinusSpawnTimeLvl(IncreaseMinusSpawnTimeLvl);
+
+        // PlayerPrefs.SetFloat("MinusSpawnTime", minusSpawnTime);
+        // PlayerPrefs.SetInt("LeafCount", leafCount);
+        // PlayerPrefs.SetInt("IncreaseMinusSpawnTimeLvl", IncreaseMinusSpawnTimeLvl);
         minusSpawnCostText.text = "Cost: " + IncreaseMinusSpawnTimeCost;
         minusSpawnLvlText.text = "Lvl: " + IncreaseMinusSpawnTimeLvl;
+        leafCountText.text = playerDataManager.GetLeafCount().ToString();
         CheckForCostIncrease(ref IncreaseMinusSpawnTimeLvl, ref IncreaseMinusSpawnTimeCost, "IncreaseMinusSpawnTimeCost", 10f);
         
         PlayerPrefs.Save();
@@ -134,7 +164,22 @@ public class PowerUpManager : MonoBehaviour
         {
             cost += Mathf.RoundToInt(cost * percentageIncrease / 100f);
             PlayerPrefs.SetInt(costKey, cost);
+            switch(costKey){
+                case "IncreaseMinusSpawnTimeCost":
+                playerDataManager.UpdateIncreaseMinusSpawnTimeCost(cost);
+
+                break;
+                case "IncreaseLeafMultiplierCost":
+                playerDataManager.UpdateIncreaseLeafMultiplierCost(cost);
+
+                break;
+                case "IncreaseTapCost":
+
+                playerDataManager.UpdateIncreaseTapCost(cost);
+                break;
+            }
         }
+        
     }
 
     // public void UpdateTapText(){

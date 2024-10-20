@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Firebase.Database;
 using Firebase.Auth;
+using Unity.Profiling;
 public class GardenGameManager : MonoBehaviour
 {
 
@@ -35,7 +36,8 @@ public class GardenGameManager : MonoBehaviour
     public bool isInitialized;
     public bool isAlreadyPlanted;
 
-    private DatabaseReference databaseReference;
+    
+    public PlayerDataManager playerDataManager;
 
     public GameObject [] plantPrefabList; // list of prefabsPlants
 
@@ -50,24 +52,21 @@ public class GardenGameManager : MonoBehaviour
         SavePlantData();
     }
 
-    public void updateEcoCoinText(){
-        PlayerPrefs.SetInt("EcoCoinCount", ecoCoinCount);
-        ecoCoinText.text = ecoCoinCount.ToString();
-        UpdateEcoCoinInDatabase(ecoCoinCount);
+    public void updateEcoCoinText(){;
+        ecoCoinText.text = playerDataManager.GetEcoCoins().ToString();
+        // UpdateEcoCoinInDatabase(ecoCoinCount);
     }
 
 
     void Start()
-    {
-          databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+    {      
         Application.targetFrameRate = 60;
-        ecoCoinCount = PlayerPrefs.GetInt("EcoCoinCount", ecoCoinCount);
+        ecoCoinCount = playerDataManager.GetEcoCoins();
         ecoCoinText.text = ecoCoinCount.ToString();
-        updateEcoCoinText();
 
         tapPower = 1;
 
-        tapPower = PlayerPrefs.GetFloat("TapPower", tapPower);
+        tapPower = playerDataManager.GetTapPower();
         //initialize pot and spawn 
         pot = GameObject.Find("Pot");
         spawn = pot.transform.Find("Spawn");
@@ -88,23 +87,23 @@ public class GardenGameManager : MonoBehaviour
         }
     }
 
-      private void UpdateEcoCoinInDatabase(int ecoCoins)
-    {
-        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId; // Get the current user ID
+    //   private void UpdateEcoCoinInDatabase(int ecoCoins)
+    // {
+    //     string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId; // Get the current user ID
 
-        // Set the ecoCoins value in the database
-        databaseReference.Child("users").Child(userId).Child("ecoCoins").SetValueAsync(ecoCoins).ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                Debug.Log("EcoCoins updated successfully in database.");
-            }
-            else
-            {
-                Debug.LogError("Failed to update EcoCoins: " + task.Exception);
-            }
-        });
-    }
+    //     // Set the ecoCoins value in the database
+    //     databaseReference.Child("users").Child(userId).Child("ecoCoins").SetValueAsync(ecoCoins).ContinueWith(task =>
+    //     {
+    //         if (task.IsCompleted)
+    //         {
+    //             Debug.Log("EcoCoins updated successfully in database.");
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("Failed to update EcoCoins: " + task.Exception);
+    //         }
+    //     });
+    // }
 
     private int FindSeedPrefabByName(string seedName)
     {

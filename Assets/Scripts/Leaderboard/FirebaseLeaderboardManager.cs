@@ -23,7 +23,8 @@ public class FirebaseLeaderboardManager : MonoBehaviour
     private string currentUsernameField;
 
 
-    void Start(){
+    void Start()
+    {
         ScoreboardButton();
     }
 
@@ -108,8 +109,12 @@ public class FirebaseLeaderboardManager : MonoBehaviour
         {
             // Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
-            ecoCoinsField.text = snapshot.Child("ecoCoins").Value.ToString();
-            trashThrownField.text = snapshot.Child("trashThrown").Value.ToString();
+
+            // Update the paths according to the new structure
+            ecoCoinsField.text = snapshot.Child("Leaderboards").Child("ecoCoinCount").Value != null ? 
+                                 snapshot.Child("Leaderboards").Child("ecoCoinCount").Value.ToString() : "0";
+            trashThrownField.text = snapshot.Child("Leaderboards").Child("totalTrashThrown").Value != null ? 
+                                   snapshot.Child("Leaderboards").Child("totalTrashThrown").Value.ToString() : "0";
         }
     }
 
@@ -121,7 +126,7 @@ public class FirebaseLeaderboardManager : MonoBehaviour
     private IEnumerator LoadScoreboardData()
     {
         // Get all the users' data ordered by ecoCoins amount
-        Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("ecoCoins").GetValueAsync();
+        Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("Leaderboards/ecoCoinCount").GetValueAsync();
 
         yield return new WaitUntil(() => DBTask.IsCompleted);
 
@@ -144,62 +149,39 @@ public class FirebaseLeaderboardManager : MonoBehaviour
             int rank = 1; // Start ranking from 1
             foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
             {
-                // string username = childSnapshot.Child("username").Value.ToString();
-                 string username = childSnapshot.Child("username").Value != null ? 
-                  childSnapshot.Child("username").Value.ToString() : "Unknown User";
+                // Access username directly from the childSnapshot
+                string username = childSnapshot.Child("username").Value != null ? 
+                                  childSnapshot.Child("username").Value.ToString() : "Unknown User";
 
-                int ecoCoins = int.Parse(childSnapshot.Child("ecoCoins").Value.ToString());
-                int trashThrown = int.Parse(childSnapshot.Child("trashThrown").Value.ToString());
+                // Check if 'leaderboards' exists and then check for ecoCoinCount and totalTrashThrown
+                DataSnapshot leaderboardsSnapshot = childSnapshot.Child("Leaderboards");
+                int ecoCoins = 0;
+                int trashThrown = 0;
+
+                if (leaderboardsSnapshot.Exists)
+                {
+                    // Only parse if the values exist
+                    if (leaderboardsSnapshot.Child("ecoCoinCount").Value != null)
+                    {
+                        ecoCoins = int.Parse(leaderboardsSnapshot.Child("ecoCoinCount").Value.ToString());
+                    }
+
+                    if (leaderboardsSnapshot.Child("totalTrashThrown").Value != null)
+                    {
+                        trashThrown = int.Parse(leaderboardsSnapshot.Child("totalTrashThrown").Value.ToString());
+                    }
+                }
 
                 // Instantiate new scoreboard elements
-                Debug.Log("Instantianting");
+                
                 GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
                 scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, ecoCoins, trashThrown, rank);
-                Debug.Log("username " + username + "ecoCoins " + ecoCoins + "trashThrown " + trashThrown + "rank " + rank);
+                Debug.Log("username " + username + " ecoCoins " + ecoCoins + " trashThrown " + trashThrown + " rank " + rank);
                 rank++; // Increment rank
             }
 
             // Go to the scoreboard screen if necessary
         }
     }
-
-    public void SaveDataButton()
-    {
-        StartCoroutine(UpdateEcoCoins(int.Parse(ecoCoinsField.text)));
-        StartCoroutine(UpdateTrashThrown(int.Parse(trashThrownField.text)));
-    }
-
-    private IEnumerator UpdateEcoCoins(int _ecoCoins)
-    {
-        // Set the currently logged in user ecoCoins
-        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("ecoCoins").SetValueAsync(_ecoCoins);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            // EcoCoins are now updated
-        }
-    }
-
-    private IEnumerator UpdateTrashThrown(int _trashThrown)
-    {
-        // Set the currently logged in user trashThrown
-        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("trashThrown").SetValueAsync(_trashThrown);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            // TrashThrown is now updated
-        }
-    }
+   
 }

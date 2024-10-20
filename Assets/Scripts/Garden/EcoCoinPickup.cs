@@ -20,7 +20,7 @@ public class EcoCoinPickup : MonoBehaviour
         // Randomize the lifetime (between 5 and 10 seconds, for example)
         lifetime = Random.Range(0.5f, 3f);
 
-        gardenManager.ecoCoinCount++;
+        gardenManager.playerDataManager.UpdateEcoCoins(1);
         gardenManager.updateEcoCoinText();
 
         // Start the transparency fade effect

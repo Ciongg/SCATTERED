@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+using Firebase.Auth;
+
 public class MainMenu : MonoBehaviour
 {
     public TextMeshProUGUI leafText;
     public CharacterDialogue characterDialogue;
     public int currentLeaf = 0;
-
+    public FirebaseAuth auth;
+    string userId;
     void Start(){
         
         currentLeaf = PlayerPrefs.GetInt("LeafCount", 0);
